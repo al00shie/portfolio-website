@@ -20,6 +20,7 @@ const projects = defineCollection({
     repoLabel: z.string().optional(),
     paper: z.string().optional(),
     liveDemo: z.string().url().optional(),
+    liveCode: z.string().optional(),
     image: z.string(),
     imageAlt: z.string(),
     animation: z
