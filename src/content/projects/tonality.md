@@ -21,6 +21,7 @@ repoLabel: al00shie/tonality576
 paper: /papers/tonality.pdf
 image: /figures/tonality.jpg
 imageAlt: World map of 527 languages overlaid on a global mean-humidity heatmap, points colored by tonality type.
+interactive: survival
 ---
 
 Why are tonal languages — where pitch alone can change a word's meaning — common in the humid tropics but rare in dry climates? This project recreates and extends Everett & Moran's (2015) hypothesis that arid air, which makes precise control of vocal pitch harder, suppresses the emergence of **complex** tone.

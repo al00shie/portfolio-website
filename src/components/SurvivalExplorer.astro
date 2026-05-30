@@ -1,0 +1,75 @@
+---
+/** Kaplan–Meier survival of complex tone vs. climate dryness, with a toggle over
+ *  three climate measures. Curves computed by scripts/data/export.R with
+ *  survival::survfit on the project's own 527-language table. */
+const measures = [
+  { key: 'mean', label: 'Mean humidity' },
+  { key: 'dry', label: 'Dry-season window' },
+  { key: 'driest', label: 'Driest extreme' },
+];
+---
+
+<figure data-survival class="mt-10">
+  <div class="overflow-hidden rounded-xl border border-line bg-panel">
+    <div class="flex flex-wrap items-center gap-3 border-b border-line bg-panel-2/60 px-4 py-3">
+      <label class="flex items-center gap-2 text-[13px] text-muted">
+        <span class="font-medium">Climate measure</span>
+        <select data-measure class="rounded-md border border-line bg-panel px-2 py-1 text-[13px] text-fg outline-none focus-visible:border-accent">
+          {measures.map((m) => <option value={m.key} selected={m.key === 'mean'}>{m.label}</option>)}
+        </select>
+      </label>
+    </div>
+    <div data-plot class="px-3 py-3 text-muted"></div>
+  </div>
+  <figcaption class="mt-3 text-[13px] leading-relaxed text-faint">
+    Kaplan–Meier survival of complex tone across 527 languages: at the wettest climates almost every
+    language keeps complex tone, and the curve falls toward zero as the air dries — the
+    survival-analysis form of Everett &amp; Moran's hypothesis. The shaded band is the 95% confidence
+    interval; switch the climate measure to see how sharply each separates the signal.
+  </figcaption>
+</figure>
+
+<script>
+  import * as Plot from '@observablehq/plot';
+  const navy = '#215e99';
+
+  function initSurvival() {
+    const root = document.querySelector<HTMLElement>('[data-survival]');
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = '1';
+
+    const sel = root.querySelector<HTMLSelectElement>('[data-measure]')!;
+    const plotDiv = root.querySelector<HTMLElement>('[data-plot]')!;
+
+    fetch('/data/tonality-survival.json')
+      .then((r) => r.json())
+      .then((data: { curves: { key: string; label: string; points: { t: number; s: number; lo: number; hi: number }[] }[] }) => {
+        const byKey = Object.fromEntries(data.curves.map((c) => [c.key, c]));
+        const render = () => {
+          const c = byKey[sel.value];
+          const xmax = Math.max(...c.points.map((p) => p.t));
+          const fig = Plot.plot({
+            height: 380,
+            marginLeft: 52,
+            marginBottom: 46,
+            style: { background: 'transparent', color: 'currentColor', fontSize: '12px' },
+            x: { label: 'climate dryness  (g/kg below the wettest)  →', domain: [0, xmax] },
+            y: { label: '↑ P(complex tone survives)', domain: [0, 1], grid: true },
+            marks: [
+              Plot.areaY(c.points, { x: 't', y1: 'lo', y2: 'hi', curve: 'step-after', fill: navy, fillOpacity: 0.14 }),
+              Plot.line(c.points, { x: 't', y: 's', curve: 'step-after', stroke: navy, strokeWidth: 2 }),
+              Plot.ruleY([0], { stroke: 'currentColor', strokeOpacity: 0.25 }),
+            ],
+          });
+          plotDiv.replaceChildren(fig);
+        };
+        sel.addEventListener('change', render);
+        render();
+      })
+      .catch(() => {});
+  }
+
+  document.addEventListener('astro:page-load', initSurvival);
+  if (document.readyState !== 'loading') initSurvival();
+  else document.addEventListener('DOMContentLoaded', initSurvival);
+</script>

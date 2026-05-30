@@ -49,3 +49,34 @@ comp$composer <- tools::toTitleCase(comp$composer)
 write_json(comp, file.path(outdir, "composers.json"), auto_unbox = TRUE, digits = 5)
 cat("wrote composers.json (", nrow(comp), "pieces,",
     length(unique(comp$composer)), "composers )\n")
+
+# ---- 3. Tonality survival: complex tone "drops out" as the climate dries -------
+suppressPackageStartupMessages(library(survival))
+td <- read.csv(
+  "/Users/Erdos/Developer/~School Projects/tonality576/data/tonal_df.csv",
+  stringsAsFactors = FALSE
+)
+td$event <- as.integer(td$complex_tonal == 0)   # isnt_complex_tonal = the "drop-out"
+
+measures <- list(
+  list(key = "mean",   label = "Mean humidity",        col = "MH"),
+  list(key = "dry",    label = "Dry-season window",     col = "lo_MH"),
+  list(key = "driest", label = "Driest extreme",        col = "min_MH")
+)
+km_curve <- function(col) {
+  h <- td[[col]] * 1000                    # g/kg, for a readable axis
+  dry <- max(h, na.rm = TRUE) - h          # dryness: 0 = wettest, larger = drier
+  ok <- is.finite(dry) & is.finite(td$event)
+  fit <- survfit(Surv(dry[ok], td$event[ok]) ~ 1)
+  s <- fit$surv
+  data.frame(
+    t  = round(fit$time, 2),
+    s  = round(s, 4),
+    lo = round(ifelse(is.finite(fit$lower), fit$lower, s), 4),
+    hi = round(ifelse(is.finite(fit$upper), fit$upper, s), 4)
+  )
+}
+surv <- lapply(measures, function(m) list(key = m$key, label = m$label, points = km_curve(m$col)))
+write_json(list(curves = surv, n = nrow(td)),
+           file.path(outdir, "tonality-survival.json"), auto_unbox = TRUE, digits = 5)
+cat("wrote tonality-survival.json (", length(surv), "climate measures,", nrow(td), "languages )\n")
