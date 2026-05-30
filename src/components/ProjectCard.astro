@@ -13,7 +13,7 @@ const tags = d.methods.slice(0, 3);
 
 <a
   href={href}
-  class="group flex flex-col overflow-hidden rounded-xl border border-line bg-panel transition-all duration-200 hover:-translate-y-1 hover:border-accent/60 hover:shadow-[0_12px_40px_-12px_rgba(33,94,153,0.28)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+  class="reveal-scroll group flex flex-col overflow-hidden rounded-xl border border-line bg-panel transition-all duration-200 hover:-translate-y-1 hover:border-accent/60 hover:shadow-[0_12px_40px_-12px_rgba(33,94,153,0.28)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
 >
   <div class="relative aspect-[16/10] overflow-hidden bg-white">
     <img
@@ -27,12 +27,12 @@ const tags = d.methods.slice(0, 3);
   </div>
 
   <div class="flex flex-1 flex-col gap-3 p-5">
-    <p class="text-[12px] font-medium uppercase tracking-wider text-faint">
+    <p class="tnum text-[12px] font-medium uppercase tracking-wider text-faint">
       {d.school} · {d.course} · {d.year}
     </p>
 
     <div class="space-y-1.5">
-      <h3 class="text-[17px] font-semibold leading-snug tracking-tight text-fg">
+      <h3 class="text-[17px] font-semibold leading-snug tracking-tight text-fg" transition:name={`title-${project.id}`}>
         {d.title}
       </h3>
       <p class="text-[14px] leading-relaxed text-muted">{d.tagline}</p>

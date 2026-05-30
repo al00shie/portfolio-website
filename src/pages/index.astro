@@ -96,7 +96,7 @@ const experience = [
         style="animation-delay:120ms"
       >
         I'm Ali Taqi. I work where statistics meets software — turning messy data
-        into models, and models into things you can actually use. Below are six
+        into models, and models into things you can actually use. Below are eight
         projects from my graduate and undergraduate work at Boston University and
         Reed College.
       </p>
@@ -107,7 +107,7 @@ const experience = [
       >
         {
           exams.map((e) => (
-            <span class="inline-flex items-center gap-2 rounded-full border border-line bg-panel px-3.5 py-1.5 text-[13.5px]">
+            <span class="tnum inline-flex items-center gap-2 rounded-full border border-line bg-panel px-3.5 py-1.5 text-[13.5px]">
               {e.passed ? (
                 <svg class="h-3.5 w-3.5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>
               ) : (
@@ -152,9 +152,9 @@ const experience = [
   <!-- ───────────────────────── Work ───────────────────────── -->
   <section id="work" class="scroll-mt-20 border-t border-line/70">
     <div class="mx-auto max-w-5xl px-5 py-20 sm:px-8 sm:py-24">
-      <div class="max-w-2xl">
+      <div class="reveal-scroll max-w-2xl">
         <p class="text-[13px] font-semibold uppercase tracking-wider text-accent">Selected Work</p>
-        <h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Six projects, end to end.</h2>
+        <h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Eight projects, end to end.</h2>
         <p class="mt-4 text-[16px] leading-relaxed text-muted">
           Statistics, probability, and machine-learning projects from my time at
           BU and Reed — each one links the full write-up and the code behind it.
@@ -170,7 +170,7 @@ const experience = [
   <!-- ───────────────────────── Skills ──────────────────────── -->
   <section id="skills" class="scroll-mt-20 border-t border-line/70 bg-panel-2/40">
     <div class="mx-auto max-w-5xl px-5 py-20 sm:px-8 sm:py-24">
-      <div class="max-w-2xl">
+      <div class="reveal-scroll max-w-2xl">
         <p class="text-[13px] font-semibold uppercase tracking-wider text-accent">Toolkit</p>
         <h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">What I work with.</h2>
       </div>
@@ -196,7 +196,7 @@ const experience = [
   <section id="about" class="scroll-mt-20 border-t border-line/70">
     <div class="mx-auto max-w-5xl px-5 py-20 sm:px-8 sm:py-24">
       <div class="grid grid-cols-1 gap-14 lg:grid-cols-[1fr_1.15fr]">
-        <div class="max-w-md">
+        <div class="reveal-scroll max-w-md">
           <p class="text-[13px] font-semibold uppercase tracking-wider text-accent">About</p>
           <h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">A statistician who likes to build.</h2>
           <div class="mt-5 space-y-4 text-[16px] leading-relaxed text-muted">
@@ -227,7 +227,7 @@ const experience = [
                       <p class="text-[14.5px] text-muted">{ed.degree}</p>
                       <p class="mt-1 text-[13px] text-faint">{ed.detail}</p>
                     </div>
-                    <p class="whitespace-nowrap text-[13.5px] text-faint">{ed.years}</p>
+                    <p class="tnum whitespace-nowrap text-[13.5px] text-faint">{ed.years}</p>
                   </div>
                 ))
               }
@@ -242,7 +242,7 @@ const experience = [
                   <div class="border-l-2 border-line pl-5">
                     <div class="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
                       <p class="font-semibold text-fg">{ex.role}</p>
-                      <p class="whitespace-nowrap text-[13.5px] text-faint">{ex.years}</p>
+                      <p class="tnum whitespace-nowrap text-[13.5px] text-faint">{ex.years}</p>
                     </div>
                     <p class="text-[14px] text-muted">{ex.org}</p>
                     <ul class="mt-2.5 space-y-1.5">
@@ -266,7 +266,7 @@ const experience = [
   <section id="contact" class="scroll-mt-20 border-t border-line/70 bg-panel-2/40">
     <div class="mx-auto max-w-5xl px-5 py-20 sm:px-8 sm:py-24">
       <div class="flex flex-col items-start justify-between gap-8 md:flex-row md:items-end">
-        <div class="max-w-xl">
+        <div class="reveal-scroll max-w-xl">
           <p class="text-[13px] font-semibold uppercase tracking-wider text-accent">Contact</p>
           <h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Let's talk.</h2>
           <p class="mt-4 text-[16px] leading-relaxed text-muted">

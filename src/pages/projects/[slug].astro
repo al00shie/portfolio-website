@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import Animation from '../../components/Animation.astro';
 
 export async function getStaticPaths() {
   const sorted = (await getCollection('projects')).sort(
@@ -37,7 +38,7 @@ const meta = [d.school, d.credential, d.course, d.year, d.role].filter(Boolean);
       <p class="text-[12.5px] font-medium uppercase tracking-wider text-faint">
         {meta.join(' · ')}
       </p>
-      <h1 class="mt-3 text-balance text-3xl font-bold leading-tight tracking-tight sm:text-[2.6rem]">
+      <h1 class="mt-3 text-balance text-3xl font-bold leading-tight tracking-tight sm:text-[2.6rem]" transition:name={`title-${project.id}`}>
         {d.title}
       </h1>
       <p class="mt-4 text-[17px] leading-relaxed text-muted">{d.summary}</p>
@@ -84,12 +85,26 @@ const meta = [d.school, d.credential, d.course, d.year, d.role].filter(Boolean);
       </div>
     </header>
 
-    <figure class="mt-10">
-      <div class="overflow-hidden rounded-xl border border-line bg-white">
-        <img src={d.image} alt={d.imageAlt} class="w-full" />
-      </div>
-      <figcaption class="mt-3 text-[13px] leading-relaxed text-faint">{d.imageAlt}</figcaption>
-    </figure>
+    {
+      d.animation ? (
+        <Animation
+          webm={d.animation.webm}
+          mp4={d.animation.mp4}
+          poster={d.animation.poster}
+          alt={d.animation.alt}
+          caption={d.animation.caption}
+          width={d.animation.width}
+          height={d.animation.height}
+        />
+      ) : (
+        <figure class="mt-10">
+          <div class="overflow-hidden rounded-xl border border-line bg-white">
+            <img src={d.image} alt={d.imageAlt} class="w-full" />
+          </div>
+          <figcaption class="mt-3 text-[13px] leading-relaxed text-faint">{d.imageAlt}</figcaption>
+        </figure>
+      )
+    }
 
     <div class="mt-9 flex flex-wrap gap-2">
       {

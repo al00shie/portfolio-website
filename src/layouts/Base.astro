@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import ThemeToggle from '../components/ThemeToggle.astro';
+import { ClientRouter } from 'astro:transitions';
 
 interface Props {
   title?: string;
@@ -37,6 +38,8 @@ const nav = [
     <meta property="og:url" content={canonical.href} />
     <meta name="twitter:card" content="summary_large_image" />
 
+    <ClientRouter />
+
     <!-- No-flash theme resolution before first paint -->
     <script is:inline>
       (function () {
@@ -48,6 +51,19 @@ const nav = [
           document.documentElement.classList.add('light');
         }
       })();
+    </script>
+
+    <!-- Re-apply theme after View Transitions swaps the document -->
+    <script is:inline>
+      document.addEventListener('astro:after-swap', function () {
+        try {
+          var t = localStorage.getItem('theme');
+          var dark = t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches);
+          var r = document.documentElement;
+          r.classList.remove('dark', 'light');
+          r.classList.add(dark ? 'dark' : 'light');
+        } catch (e) {}
+      });
     </script>
   </head>
 

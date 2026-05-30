@@ -115,13 +115,37 @@ a {
   animation: reveal-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* Scroll-driven reveal — progressive enhancement, 0 KB JS.
+   Default state is fully visible; only Chromium + motion-OK users get the effect. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal-scroll {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 30%;
+    }
+  }
+}
+
+/* ---- Typographic craft -------------------------------------------------- */
+/* Tabular, slashed-zero figures for stats, dates, scores, axes. */
+.tnum {
+  font-variant-numeric: tabular-nums slashed-zero;
+  font-feature-settings: "tnum", "zero";
+}
+/* Small-caps for acronyms so they nest at x-height instead of shouting. */
+.sc {
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.02em;
+}
+
 /* ---- Article prose (project detail body) ------------------------------- */
 .article {
   color: var(--muted);
   font-size: 16.5px;
   line-height: 1.75;
 }
-.article > p { margin-block: 1.15em; }
+.article > p { margin-block: 1.15em; text-wrap: pretty; }
 .article > p:first-child { margin-top: 0; }
 .article strong { color: var(--fg); font-weight: 650; }
 .article em { font-style: italic; }

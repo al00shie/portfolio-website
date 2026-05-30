@@ -22,6 +22,17 @@ const projects = defineCollection({
     liveDemo: z.string().url().optional(),
     image: z.string(),
     imageAlt: z.string(),
+    animation: z
+      .object({
+        webm: z.string(),
+        mp4: z.string(),
+        poster: z.string(),
+        alt: z.string(),
+        caption: z.string().optional(),
+        width: z.number().default(900),
+        height: z.number().default(560),
+      })
+      .optional(),
   }),
 });
 
