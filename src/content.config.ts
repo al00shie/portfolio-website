@@ -21,6 +21,7 @@ const projects = defineCollection({
     paper: z.string().optional(),
     liveDemo: z.string().url().optional(),
     liveCode: z.string().optional(),
+    interactive: z.enum(['semicircle', 'stylometry']).optional(),
     image: z.string(),
     imageAlt: z.string(),
     animation: z

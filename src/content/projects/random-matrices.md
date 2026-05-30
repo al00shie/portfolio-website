@@ -20,6 +20,7 @@ methods:
 repo: https://github.com/al00shie/thesis-taqi
 repoLabel: al00shie/thesis-taqi
 liveCode: /live/random-matrix
+interactive: semicircle
 paper: /papers/random-matrices.pdf
 image: /figures/random-matrices.jpg
 imageAlt: Norm-ordered spectral densities of 15×15 Beta-2 and Beta-4 random-matrix ensembles, colored by eigenvalue order.

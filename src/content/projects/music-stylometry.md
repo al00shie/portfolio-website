@@ -20,6 +20,7 @@ repo: https://github.com/Reed-Math241/music_stylo
 repoLabel: Reed-Math241/music_stylo
 image: /figures/music-stylometry.jpg
 imageAlt: Boxplots of average composition consonance by composer for Bach, Beethoven, Chopin, Joplin, and Vivaldi.
+interactive: stylometry
 ---
 
 Stylometry is the statistical fingerprinting of authorship — the tools that can tell Shakespeare from Marlowe by counting function words. This project asks whether the same idea works on *music*: can harmony alone fingerprint a composer?
