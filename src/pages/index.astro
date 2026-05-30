@@ -1,0 +1,296 @@
+---
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+const projects = (await getCollection('projects'))
+  .filter((p) => p.data.featured)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const exams = [
+  { name: 'Exam P', sub: 'Probability', passed: true, note: 'Passed' },
+  { name: 'Exam FM', sub: 'Financial Mathematics', passed: true, note: 'Passed' },
+  { name: 'MAS-I', sub: 'Modern Actuarial Statistics', passed: false, note: 'Jul 2026' },
+];
+
+const skillGroups = [
+  {
+    title: 'Statistics & Modeling',
+    items: ['Regression & GLMs', 'Survival analysis', 'Time-series forecasting', 'Statistical inference', 'Monte Carlo simulation', 'Machine learning'],
+  },
+  {
+    title: 'Programming & Data',
+    items: ['R · tidyverse', 'Python', 'SQL', 'MATLAB', 'VBA · Excel', 'Git'],
+  },
+  {
+    title: 'Actuarial & Domain',
+    items: ['Probability', 'Financial mathematics', 'Econometrics', 'Predictive modeling', 'Insurance fundamentals'],
+  },
+];
+
+const education = [
+  {
+    school: 'Boston University',
+    degree: 'M.A. Statistics',
+    years: '2021 – 2023',
+    detail: 'Financial Derivatives · Stochastic Processes · Generalized Linear Models',
+  },
+  {
+    school: 'Reed College',
+    degree: 'B.A. Mathematics',
+    years: '2017 – 2021',
+    detail: 'Econometrics · Statistical Learning · Data Science',
+  },
+];
+
+const experience = [
+  {
+    role: 'Research Affiliate',
+    org: 'Pardee School of Global Studies, Boston University',
+    years: '2023 – 2025',
+    points: [
+      'Built automated R and Excel pipelines to clean, validate, and analyze 15+ economic and demographic datasets spanning 12M+ records.',
+      'Led the quantitative analysis on several concurrent projects, choosing methods and running post-hoc policy analyses.',
+      'Turned statistical findings into reports, time-series visualizations, and geospatial heatmaps for non-technical stakeholders.',
+    ],
+  },
+  {
+    role: 'Web Systems Administrator',
+    org: 'Office of Student Engagement, Reed College',
+    years: '2020 – 2021',
+    points: [
+      'Maintained data integrity for 10K+ student records through SQL queries against a live platform serving 1K+ users.',
+      'Cut funding-request processing time by 80% with improved web interfaces and database automation.',
+      'Led a small student development team and acted as primary liaison to management.',
+    ],
+  },
+];
+---
+
+<Base>
+  <!-- ───────────────────────── Hero ───────────────────────── -->
+  <section class="relative overflow-hidden">
+    <div
+      class="pointer-events-none absolute inset-0 -z-10"
+      aria-hidden="true"
+    >
+      <div class="absolute -right-32 -top-40 h-[28rem] w-[28rem] rounded-full bg-accent/10 blur-3xl"></div>
+      <div class="absolute -left-40 top-24 h-[22rem] w-[22rem] rounded-full bg-navy/5 blur-3xl"></div>
+    </div>
+
+    <div class="mx-auto max-w-5xl px-5 pb-16 pt-20 sm:px-8 sm:pb-20 sm:pt-28">
+      <p class="reveal flex items-center gap-2 text-[13px] font-semibold uppercase tracking-wider text-accent">
+        <span class="inline-block h-1.5 w-1.5 rounded-full bg-accent"></span>
+        Vancouver, WA · Open to actuarial & analytics roles
+      </p>
+
+      <h1
+        class="reveal mt-5 max-w-3xl text-balance text-4xl font-bold leading-[1.07] tracking-tight sm:text-5xl md:text-6xl"
+        style="animation-delay:60ms"
+      >
+        Quantitative analyst &amp;<br class="hidden sm:block" /> actuarial candidate.
+      </h1>
+
+      <p
+        class="reveal mt-6 max-w-2xl text-[17px] leading-relaxed text-muted sm:text-lg"
+        style="animation-delay:120ms"
+      >
+        I'm Ali Taqi. I work where statistics meets software — turning messy data
+        into models, and models into things you can actually use. Below are six
+        projects from my graduate and undergraduate work at Boston University and
+        Reed College.
+      </p>
+
+      <div
+        class="reveal mt-8 flex flex-wrap items-center gap-2.5"
+        style="animation-delay:180ms"
+      >
+        {
+          exams.map((e) => (
+            <span class="inline-flex items-center gap-2 rounded-full border border-line bg-panel px-3.5 py-1.5 text-[13.5px]">
+              {e.passed ? (
+                <svg class="h-3.5 w-3.5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>
+              ) : (
+                <span class="inline-block h-1.5 w-1.5 rounded-full bg-faint" />
+              )}
+              <span class="font-semibold text-fg">{e.name}</span>
+              <span class="text-faint">{e.note}</span>
+            </span>
+          ))
+        }
+      </div>
+
+      <div
+        class="reveal mt-9 flex flex-wrap items-center gap-3"
+        style="animation-delay:240ms"
+      >
+        <a
+          href="#work"
+          class="inline-flex items-center gap-2 rounded-lg bg-navy px-5 py-2.5 text-[14.5px] font-semibold text-white transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        >
+          View Work
+          <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7" /></svg>
+        </a>
+        <a
+          href="mailto:alif.taqi00@gmail.com"
+          class="inline-flex items-center gap-2 rounded-lg border border-line px-5 py-2.5 text-[14.5px] font-semibold text-fg transition-colors hover:border-accent hover:text-accent"
+        >
+          Email
+        </a>
+        <a
+          href="https://github.com/al00shie"
+          target="_blank"
+          rel="noopener"
+          class="inline-flex items-center gap-2 rounded-lg border border-line px-5 py-2.5 text-[14.5px] font-semibold text-fg transition-colors hover:border-accent hover:text-accent"
+        >
+          GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── Work ───────────────────────── -->
+  <section id="work" class="scroll-mt-20 border-t border-line/70">
+    <div class="mx-auto max-w-5xl px-5 py-20 sm:px-8 sm:py-24">
+      <div class="max-w-2xl">
+        <p class="text-[13px] font-semibold uppercase tracking-wider text-accent">Selected Work</p>
+        <h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Six projects, end to end.</h2>
+        <p class="mt-4 text-[16px] leading-relaxed text-muted">
+          Statistics, probability, and machine-learning projects from my time at
+          BU and Reed — each one links the full write-up and the code behind it.
+        </p>
+      </div>
+
+      <div class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
+        {projects.map((project) => <ProjectCard project={project} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── Skills ──────────────────────── -->
+  <section id="skills" class="scroll-mt-20 border-t border-line/70 bg-panel-2/40">
+    <div class="mx-auto max-w-5xl px-5 py-20 sm:px-8 sm:py-24">
+      <div class="max-w-2xl">
+        <p class="text-[13px] font-semibold uppercase tracking-wider text-accent">Toolkit</p>
+        <h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">What I work with.</h2>
+      </div>
+
+      <div class="mt-12 grid grid-cols-1 gap-10 sm:grid-cols-3">
+        {
+          skillGroups.map((g) => (
+            <div>
+              <h3 class="text-[14px] font-semibold uppercase tracking-wide text-fg">{g.title}</h3>
+              <ul class="mt-4 flex flex-wrap gap-2">
+                {g.items.map((item) => (
+                  <li class="rounded-md border border-line bg-panel px-3 py-1.5 text-[13.5px] text-muted">{item}</li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── About ──────────────────────── -->
+  <section id="about" class="scroll-mt-20 border-t border-line/70">
+    <div class="mx-auto max-w-5xl px-5 py-20 sm:px-8 sm:py-24">
+      <div class="grid grid-cols-1 gap-14 lg:grid-cols-[1fr_1.15fr]">
+        <div class="max-w-md">
+          <p class="text-[13px] font-semibold uppercase tracking-wider text-accent">About</p>
+          <h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">A statistician who likes to build.</h2>
+          <div class="mt-5 space-y-4 text-[16px] leading-relaxed text-muted">
+            <p>
+              I'm an early-career actuary and quantitative analyst based in
+              Vancouver, WA. I hold an M.A. in Statistics from Boston University
+              and a B.A. in Mathematics from Reed College, and I've passed
+              actuarial Exams P and FM — with MAS-I scheduled for July 2026.
+            </p>
+            <p>
+              My background is heavy on probability, statistical modeling, and
+              communicating results, but I'm just as comfortable writing the code
+              and building the pipeline. Most of what I make starts as a question
+              and ends as something you can read, run, or click.
+            </p>
+          </div>
+        </div>
+
+        <div class="space-y-12">
+          <div>
+            <h3 class="text-[13px] font-semibold uppercase tracking-wider text-faint">Education</h3>
+            <div class="mt-5 space-y-6">
+              {
+                education.map((ed) => (
+                  <div class="flex flex-col gap-1 border-l-2 border-line pl-5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
+                    <div>
+                      <p class="font-semibold text-fg">{ed.school}</p>
+                      <p class="text-[14.5px] text-muted">{ed.degree}</p>
+                      <p class="mt-1 text-[13px] text-faint">{ed.detail}</p>
+                    </div>
+                    <p class="whitespace-nowrap text-[13.5px] text-faint">{ed.years}</p>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-[13px] font-semibold uppercase tracking-wider text-faint">Experience</h3>
+            <div class="mt-5 space-y-7">
+              {
+                experience.map((ex) => (
+                  <div class="border-l-2 border-line pl-5">
+                    <div class="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
+                      <p class="font-semibold text-fg">{ex.role}</p>
+                      <p class="whitespace-nowrap text-[13.5px] text-faint">{ex.years}</p>
+                    </div>
+                    <p class="text-[14px] text-muted">{ex.org}</p>
+                    <ul class="mt-2.5 space-y-1.5">
+                      {ex.points.map((pt) => (
+                        <li class="relative pl-4 text-[13.5px] leading-relaxed text-muted before:absolute before:left-0 before:top-2 before:h-1 before:w-1 before:rounded-full before:bg-accent">
+                          {pt}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── Contact ─────────────────────── -->
+  <section id="contact" class="scroll-mt-20 border-t border-line/70 bg-panel-2/40">
+    <div class="mx-auto max-w-5xl px-5 py-20 sm:px-8 sm:py-24">
+      <div class="flex flex-col items-start justify-between gap-8 md:flex-row md:items-end">
+        <div class="max-w-xl">
+          <p class="text-[13px] font-semibold uppercase tracking-wider text-accent">Contact</p>
+          <h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Let's talk.</h2>
+          <p class="mt-4 text-[16px] leading-relaxed text-muted">
+            I'm open to actuarial and quantitative-analytics roles. Email is the
+            fastest way to reach me — I read everything.
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <a
+            href="mailto:alif.taqi00@gmail.com"
+            class="inline-flex items-center gap-2 rounded-lg bg-navy px-5 py-2.5 text-[14.5px] font-semibold text-white transition-transform hover:-translate-y-0.5"
+          >
+            alif.taqi00@gmail.com
+          </a>
+          <a
+            href="https://github.com/al00shie"
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-2 rounded-lg border border-line px-5 py-2.5 text-[14.5px] font-semibold text-fg transition-colors hover:border-accent hover:text-accent"
+          >
+            GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

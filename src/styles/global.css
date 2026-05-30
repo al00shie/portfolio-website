@@ -1,0 +1,146 @@
+@import "tailwindcss";
+
+/* Class-based dark mode (manual toggle), falls back to system on first paint */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---- Design tokens ------------------------------------------------------ */
+@theme {
+  /* Brand constant — matches the résumé heading navy */
+  --color-navy: #215e99;
+
+  /* Semantic colors resolve through :root vars so they flip in dark mode */
+  --color-surface: var(--surface);
+  --color-panel: var(--panel);
+  --color-panel-2: var(--panel-2);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+
+  --font-sans: "Helvetica Neue", Helvetica, "Inter", system-ui, -apple-system,
+    "Segoe UI", Arial, sans-serif;
+  --font-mono: "SF Mono", "JetBrains Mono", "Fira Code", ui-monospace,
+    SFMono-Regular, Menlo, monospace;
+
+  /* Tighter, editorial reading width */
+  --breakpoint-xs: 30rem;
+}
+
+/* ---- Light theme (default) --------------------------------------------- */
+:root {
+  --surface: #fbfaf7;
+  --panel: #ffffff;
+  --panel-2: #f4f2ec;
+  --fg: #16191d;
+  --muted: #565f6b;
+  --faint: #8a93a0;
+  --line: #e7e4db;
+  --accent: #215e99;
+  --accent-soft: #eaf1f9;
+  color-scheme: light;
+}
+
+/* ---- Dark theme -------------------------------------------------------- */
+html.dark {
+  --surface: #0d1014;
+  --panel: #14181e;
+  --panel-2: #1b212a;
+  --fg: #e9ecf1;
+  --muted: #9aa4b2;
+  --faint: #6b7585;
+  --line: #232b35;
+  --accent: #6fa8df;
+  --accent-soft: #16222f;
+  color-scheme: dark;
+}
+
+/* ---- Base -------------------------------------------------------------- */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--surface);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-feature-settings: "kern", "liga", "calt";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Honor system preference before the user touches the toggle */
+@media (prefers-color-scheme: dark) {
+  html:not(.dark):not(.light) {
+    --surface: #0d1014;
+    --panel: #14181e;
+    --panel-2: #1b212a;
+    --fg: #e9ecf1;
+    --muted: #9aa4b2;
+    --faint: #6b7585;
+    --line: #232b35;
+    --accent: #6fa8df;
+    --accent-soft: #16222f;
+    color-scheme: dark;
+  }
+}
+
+::selection {
+  background: var(--accent);
+  color: #fff;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Respect reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Subtle, reusable rising-in animation (opt-in via .reveal) */
+@keyframes reveal-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+.reveal {
+  animation: reveal-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ---- Article prose (project detail body) ------------------------------- */
+.article {
+  color: var(--muted);
+  font-size: 16.5px;
+  line-height: 1.75;
+}
+.article > p { margin-block: 1.15em; }
+.article > p:first-child { margin-top: 0; }
+.article strong { color: var(--fg); font-weight: 650; }
+.article em { font-style: italic; }
+.article a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.article h2 {
+  color: var(--fg);
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-top: 1.8em;
+  margin-bottom: 0.5em;
+}
+.article ul {
+  margin-block: 1.15em;
+  padding-left: 1.25em;
+  list-style: disc;
+}
+.article li { margin-block: 0.4em; }
