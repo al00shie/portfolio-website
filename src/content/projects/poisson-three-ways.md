@@ -17,6 +17,7 @@ methods:
   - Maximum likelihood
   - Ridge regularization
   - R
+liveCode: /live/mcmc
 paper: /papers/poisson-three-ways.pdf
 image: /figures/poisson-three-ways.jpg
 imageAlt: Three-dimensional surface of the joint prior density over the two Poisson-GLM coefficients.
