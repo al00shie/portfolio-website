@@ -21,12 +21,15 @@
 </button>
 
 <script is:inline>
+  // Delegated + bound once on document so it survives View Transitions swaps.
   (function () {
-    const btn = document.getElementById('theme-toggle');
-    if (!btn) return;
-    btn.addEventListener('click', function () {
-      const root = document.documentElement;
-      const toDark = !root.classList.contains('dark');
+    if (window.__themeToggleBound) return;
+    window.__themeToggleBound = true;
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest && e.target.closest('#theme-toggle');
+      if (!btn) return;
+      var root = document.documentElement;
+      var toDark = !root.classList.contains('dark');
       root.classList.toggle('dark', toDark);
       root.classList.toggle('light', !toDark);
       try { localStorage.setItem('theme', toDark ? 'dark' : 'light'); } catch (e) {}

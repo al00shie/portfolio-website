@@ -1,6 +1,9 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import Animation from '../../components/Animation.astro';
+import SemicircleExplorer from '../../components/SemicircleExplorer.astro';
+import StylometryExplorer from '../../components/StylometryExplorer.astro';
 
 export async function getStaticPaths() {
   const sorted = (await getCollection('projects')).sort(
@@ -37,7 +40,7 @@ const meta = [d.school, d.credential, d.course, d.year, d.role].filter(Boolean);
       <p class="text-[12.5px] font-medium uppercase tracking-wider text-faint">
         {meta.join(' · ')}
       </p>
-      <h1 class="mt-3 text-balance text-3xl font-bold leading-tight tracking-tight sm:text-[2.6rem]">
+      <h1 class="mt-3 text-balance text-3xl font-bold leading-tight tracking-tight sm:text-[2.6rem]" transition:name={`title-${project.id}`}>
         {d.title}
       </h1>
       <p class="mt-4 text-[17px] leading-relaxed text-muted">{d.summary}</p>
@@ -70,6 +73,17 @@ const meta = [d.school, d.credential, d.course, d.year, d.role].filter(Boolean);
           )
         }
         {
+          d.liveCode && (
+            <a
+              href={d.liveCode}
+              class="inline-flex items-center gap-2 rounded-lg border border-accent bg-accent-soft px-4 py-2.5 text-[14px] font-semibold text-accent transition-transform hover:-translate-y-0.5"
+            >
+              <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3" /><path d="m10 9 4 3-4 3z" /></svg>
+              Run it Live
+            </a>
+          )
+        }
+        {
           d.liveDemo && (
             <a
               href={d.liveDemo}
@@ -84,12 +98,26 @@ const meta = [d.school, d.credential, d.course, d.year, d.role].filter(Boolean);
       </div>
     </header>
 
-    <figure class="mt-10">
-      <div class="overflow-hidden rounded-xl border border-line bg-white">
-        <img src={d.image} alt={d.imageAlt} class="w-full" />
-      </div>
-      <figcaption class="mt-3 text-[13px] leading-relaxed text-faint">{d.imageAlt}</figcaption>
-    </figure>
+    {
+      d.animation ? (
+        <Animation
+          webm={d.animation.webm}
+          mp4={d.animation.mp4}
+          poster={d.animation.poster}
+          alt={d.animation.alt}
+          caption={d.animation.caption}
+          width={d.animation.width}
+          height={d.animation.height}
+        />
+      ) : (
+        <figure class="mt-10">
+          <div class="overflow-hidden rounded-xl border border-line bg-white">
+            <img src={d.image} alt={d.imageAlt} class="w-full" />
+          </div>
+          <figcaption class="mt-3 text-[13px] leading-relaxed text-faint">{d.imageAlt}</figcaption>
+        </figure>
+      )
+    }
 
     <div class="mt-9 flex flex-wrap gap-2">
       {
@@ -110,6 +138,9 @@ const meta = [d.school, d.credential, d.course, d.year, d.role].filter(Boolean);
     <div class="article mt-8">
       <Content />
     </div>
+
+    {d.interactive === 'semicircle' && <SemicircleExplorer />}
+    {d.interactive === 'stylometry' && <StylometryExplorer />}
 
     <!-- Prev / next -->
     <nav class="mt-16 grid grid-cols-1 gap-4 border-t border-line pt-8 sm:grid-cols-2">

@@ -1,0 +1,184 @@
+---
+import Base from '../../layouts/Base.astro';
+
+const defaultCode = `# Wigner's semicircle law — running live in your browser.
+# The eigenvalues of a large random symmetric matrix, rescaled to [-2, 2],
+# pile up under a fixed semicircle as N grows. Change N and re-run.
+
+N <- 600
+A <- matrix(rnorm(N * N), N, N)
+H <- (A + t(A)) / sqrt(2)            # symmetric (GOE) matrix
+ev <- eigen(H / sqrt(N), symmetric = TRUE, only.values = TRUE)$values
+
+hist(ev, breaks = 50, freq = FALSE,
+     col = "#215e99", border = "white",
+     main = sprintf("Eigenvalues of a %d x %d random symmetric matrix", N, N),
+     xlab = "eigenvalue (scaled)")
+
+# overlay the limiting Wigner semicircle density
+curve(sqrt(pmax(0, 4 - x^2)) / (2 * pi),
+      add = TRUE, col = "#c2410c", lwd = 3)
+`;
+---
+
+<Base
+  title="Live R — Wigner's semicircle | Ali Taqi"
+  description="Run real R code in your browser: simulate a random symmetric matrix and watch its eigenvalues fill the Wigner semicircle. Powered by WebR (R compiled to WebAssembly)."
+>
+  <section class="mx-auto max-w-3xl px-5 py-14 sm:px-8 sm:py-16">
+    <a
+      href="/projects/random-matrices"
+      class="inline-flex items-center gap-1.5 text-[13.5px] font-medium text-muted transition-colors hover:text-accent"
+    >
+      <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6" /></svg>
+      Random Matrices
+    </a>
+
+    <header class="mt-7">
+      <p class="text-[12.5px] font-medium uppercase tracking-wider text-faint">Live code · WebR</p>
+      <h1 class="mt-3 text-balance text-3xl font-bold leading-tight tracking-tight sm:text-[2.4rem]">
+        Watch the semicircle emerge — in real R.
+      </h1>
+      <p class="mt-4 text-[16.5px] leading-relaxed text-muted">
+        This isn't a recording. The code below runs entirely in your browser through
+        <a class="text-accent underline underline-offset-2" href="https://docs.r-wasm.org/webr/latest/" target="_blank" rel="noopener">WebR</a> —
+        the actual R interpreter compiled to WebAssembly. Edit it, press <strong class="text-fg">Run</strong>,
+        and the eigenvalues of a fresh random matrix are computed on your machine. Bump
+        <code class="rounded bg-panel-2 px-1 py-0.5 text-[13px]">N</code> and watch the histogram lock onto the semicircle.
+      </p>
+    </header>
+
+    <div data-webr-cell class="mt-9">
+      <div class="overflow-hidden rounded-xl border border-line bg-panel">
+        <div class="flex items-center justify-between border-b border-line bg-panel-2/60 px-4 py-2.5">
+          <span class="font-mono text-[12.5px] text-faint">random-matrix.R</span>
+          <div class="flex items-center gap-2">
+            <button
+              type="button"
+              data-webr-reset
+              class="rounded-md px-2.5 py-1 text-[12.5px] font-medium text-muted transition-colors hover:text-accent"
+            >
+              Reset
+            </button>
+            <button
+              type="button"
+              data-webr-run
+              class="inline-flex items-center gap-1.5 rounded-md bg-navy px-3.5 py-1.5 text-[13px] font-semibold text-white transition-all hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"></path></svg>
+              <span data-webr-run-label>Run</span>
+            </button>
+          </div>
+        </div>
+        <textarea
+          data-webr-code
+          spellcheck="false"
+          rows="16"
+          class="block w-full resize-y bg-transparent px-4 py-3.5 font-mono text-[13px] leading-relaxed text-fg outline-none"
+        >{defaultCode}</textarea>
+      </div>
+
+      <p data-webr-status class="mt-3 flex items-center gap-2 text-[13px] text-faint" role="status" aria-live="polite">
+        Press <strong class="font-semibold text-fg">Run</strong> to start R. The first run downloads the R runtime (a few seconds); after that it's instant.
+      </p>
+
+      <div class="mt-4 overflow-hidden rounded-xl border border-line bg-white">
+        <canvas data-webr-canvas width="720" height="480" class="block h-auto w-full" aria-label="Plot output from the R code"></canvas>
+      </div>
+      <pre data-webr-output class="mt-3 hidden overflow-x-auto rounded-lg border border-line bg-panel-2/50 px-4 py-3 font-mono text-[12.5px] leading-relaxed text-muted"></pre>
+    </div>
+
+    <p class="mt-8 text-[13px] leading-relaxed text-faint">
+      Runs on base R only (no package downloads), so it starts in seconds. The same
+      simulation, taken to many matrix sizes, is the animation on the
+      <a class="text-accent underline underline-offset-2" href="/projects/random-matrices">project page</a>.
+    </p>
+  </section>
+</Base>
+
+<script>
+  const WEBR_URL = 'https://webr.r-wasm.org/latest/webr.mjs';
+  let webRPromise: Promise<any> | null = null;
+
+  function getWebR(onStatus: (m: string) => void) {
+    if (!webRPromise) {
+      onStatus('Starting R — downloading the runtime (a few seconds the first time)…');
+      webRPromise = (async () => {
+        const { WebR } = await import(/* @vite-ignore */ WEBR_URL);
+        const webR = new WebR();
+        await webR.init();
+        return webR;
+      })();
+    }
+    return webRPromise;
+  }
+
+  function initWebRCell() {
+    const root = document.querySelector<HTMLElement>('[data-webr-cell]');
+    if (!root || root.dataset.bound) return;
+    root.dataset.bound = '1';
+
+    const codeEl = root.querySelector<HTMLTextAreaElement>('[data-webr-code]')!;
+    const runBtn = root.querySelector<HTMLButtonElement>('[data-webr-run]')!;
+    const runLabel = root.querySelector<HTMLElement>('[data-webr-run-label]')!;
+    const resetBtn = root.querySelector<HTMLButtonElement>('[data-webr-reset]')!;
+    const statusEl = root.querySelector<HTMLElement>('[data-webr-status]')!;
+    const canvas = root.querySelector<HTMLCanvasElement>('[data-webr-canvas]')!;
+    const outEl = root.querySelector<HTMLPreElement>('[data-webr-output]')!;
+    const original = codeEl.value;
+
+    const setStatus = (m: string) => { statusEl.textContent = m; };
+
+    async function run() {
+      runBtn.disabled = true;
+      runLabel.textContent = 'Running…';
+      try {
+        const webR = await getWebR(setStatus);
+        setStatus('Running your code…');
+        const shelter = await new webR.Shelter();
+        try {
+          const result = await shelter.captureR(codeEl.value, {
+            withAutoprint: true,
+            captureStreams: true,
+            captureConditions: false,
+            captureGraphics: { width: 720, height: 480 },
+          });
+          const img = result.images?.[result.images.length - 1];
+          if (img) {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            canvas.getContext('2d')!.drawImage(img, 0, 0);
+          }
+          const text = (result.output || [])
+            .filter((o: any) => o.type === 'stdout' || o.type === 'stderr')
+            .map((o: any) => o.data)
+            .join('\n')
+            .trim();
+          if (text) { outEl.textContent = text; outEl.classList.remove('hidden'); }
+          else { outEl.classList.add('hidden'); }
+          setStatus('Done — that ran in your browser.');
+        } finally {
+          shelter.purge();
+        }
+      } catch (err) {
+        outEl.textContent = String(err);
+        outEl.classList.remove('hidden');
+        setStatus('Something went wrong — see the message below.');
+      } finally {
+        runBtn.disabled = false;
+        runLabel.textContent = 'Run';
+      }
+    }
+
+    runBtn.addEventListener('click', run);
+    resetBtn.addEventListener('click', () => { codeEl.value = original; });
+    // Cmd/Ctrl+Enter to run
+    codeEl.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); run(); }
+    });
+  }
+
+  document.addEventListener('astro:page-load', initWebRCell);
+  if (document.readyState !== 'loading') initWebRCell();
+  else document.addEventListener('DOMContentLoaded', initWebRCell);
+</script>

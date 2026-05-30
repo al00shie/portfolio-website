@@ -1,0 +1,6 @@
+# Cross-origin isolation for the /live/* WebR pages only, so R-on-WebAssembly
+# can use the fast SharedArrayBuffer channel. Scoped to /live/* so the rest of
+# the site (videos, etc.) is unaffected by require-corp.
+/live/*
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: require-corp

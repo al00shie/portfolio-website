@@ -17,9 +17,18 @@ methods:
   - Maximum likelihood
   - Ridge regularization
   - R
+liveCode: /live/mcmc
 paper: /papers/poisson-three-ways.pdf
 image: /figures/poisson-three-ways.jpg
 imageAlt: Three-dimensional surface of the joint prior density over the two Poisson-GLM coefficients.
+animation:
+  webm: /anim/mcmc.webm
+  mp4: /anim/mcmc.mp4
+  poster: /anim/mcmc-poster.jpg
+  alt: "Metropolis MCMC draws filling in the joint posterior of a Poisson regression's two coefficients."
+  caption: "The hand-coded Metropolis sampler exploring the joint posterior of the intercept and age-slope coefficients. Each point is one accepted draw; the diagonal spread is their negative correlation, and the amber diamond marks the posterior mean."
+  width: 760
+  height: 620
 ---
 
 This final took a deliberately simple model — a Poisson generalized linear model for count data, fit to library book-checkout counts — and worked it through three different statistical philosophies to see where they agree and where they diverge.
