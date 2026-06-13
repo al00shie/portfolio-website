@@ -2,23 +2,19 @@
 import '../styles/global.css';
 import ThemeToggle from '../components/ThemeToggle.astro';
 import { ClientRouter } from 'astro:transitions';
+import content from '../../content.yaml';
+
+// Site identity, nav, and SEO defaults all live in /content.yaml.
+const { site, nav } = content;
 
 interface Props {
   title?: string;
   description?: string;
 }
 
-const {
-  title = 'Ali Taqi — Quantitative Analyst & Actuarial Candidate',
-  description = 'Portfolio of Ali Taqi: actuarial candidate (Exam P & FM) and quantitative analyst. Statistics, probability, and machine-learning projects from Boston University and Reed College.',
-} = Astro.props;
+const { title = site.title, description = site.description } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://alitaqi.pages.dev');
-const nav = [
-  { label: 'Work', href: '/#work' },
-  { label: 'About', href: '/#about' },
-  { label: 'Contact', href: '/#contact' },
-];
 ---
 
 <!doctype html>
@@ -30,7 +26,7 @@ const nav = [
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical.href} />
-    <meta name="author" content="Ali Taqi" />
+    <meta name="author" content={site.name} />
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
@@ -78,12 +74,12 @@ const nav = [
       class="sticky top-0 z-40 border-b border-line/70 bg-surface/80 backdrop-blur-md"
     >
       <div class="mx-auto flex h-16 max-w-5xl items-center justify-between px-5 sm:px-8">
-        <a href="/" class="group flex items-center gap-2.5" aria-label="Ali Taqi — home">
+        <a href="/" class="group flex items-center gap-2.5" aria-label={`${site.name} — home`}>
           <span
             class="grid h-8 w-8 place-items-center rounded-md bg-navy text-[13px] font-bold tracking-tight text-white"
-            >AT</span
+            >{site.initials}</span
           >
-          <span class="text-[15px] font-semibold tracking-tight">Ali Taqi</span>
+          <span class="text-[15px] font-semibold tracking-tight">{site.name}</span>
         </a>
 
         <nav class="flex items-center gap-1 sm:gap-2">
@@ -111,10 +107,10 @@ const nav = [
       <div
         class="mx-auto flex max-w-5xl flex-col items-center justify-between gap-4 px-5 py-10 text-[13.5px] text-muted sm:flex-row sm:px-8"
       >
-        <p>© {new Date().getFullYear()} Ali Taqi</p>
+        <p>© {new Date().getFullYear()} {site.name}</p>
         <div class="flex items-center gap-5">
-          <a class="transition-colors hover:text-accent" href="mailto:alif.taqi00@gmail.com">Email</a>
-          <a class="transition-colors hover:text-accent" href="https://github.com/al00shie" target="_blank" rel="noopener">GitHub</a>
+          <a class="transition-colors hover:text-accent" href={`mailto:${site.email}`}>Email</a>
+          <a class="transition-colors hover:text-accent" href={site.github} target="_blank" rel="noopener">GitHub</a>
           <a class="transition-colors hover:text-accent" href="/#work">Work</a>
         </div>
       </div>

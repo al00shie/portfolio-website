@@ -2,69 +2,14 @@
 import Base from '../layouts/Base.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import { getCollection } from 'astro:content';
+import content from '../../content.yaml';
 
 const projects = (await getCollection('projects'))
   .filter((p) => p.data.featured)
   .sort((a, b) => a.data.order - b.data.order);
 
-const exams = [
-  { name: 'Exam P', sub: 'Probability', passed: true, note: 'Passed' },
-  { name: 'Exam FM', sub: 'Financial Mathematics', passed: true, note: 'Passed' },
-  { name: 'MAS-I', sub: 'Modern Actuarial Statistics', passed: false, note: 'Jul 2026' },
-];
-
-const skillGroups = [
-  {
-    title: 'Statistics & Modeling',
-    items: ['Regression & GLMs', 'Survival analysis', 'Time-series forecasting', 'Statistical inference', 'Monte Carlo simulation', 'Machine learning'],
-  },
-  {
-    title: 'Programming & Data',
-    items: ['R · tidyverse', 'Python', 'SQL', 'MATLAB', 'VBA · Excel', 'Git'],
-  },
-  {
-    title: 'Actuarial & Domain',
-    items: ['Probability', 'Financial mathematics', 'Econometrics', 'Predictive modeling', 'Insurance fundamentals'],
-  },
-];
-
-const education = [
-  {
-    school: 'Boston University',
-    degree: 'M.A. Statistics',
-    years: '2021 – 2023',
-    detail: 'Financial Derivatives · Stochastic Processes · Generalized Linear Models',
-  },
-  {
-    school: 'Reed College',
-    degree: 'B.A. Mathematics',
-    years: '2017 – 2021',
-    detail: 'Econometrics · Statistical Learning · Data Science',
-  },
-];
-
-const experience = [
-  {
-    role: 'Research Affiliate',
-    org: 'Pardee School of Global Studies, Boston University',
-    years: '2023 – 2025',
-    points: [
-      'Built automated R and Excel pipelines to clean, validate, and analyze 15+ economic and demographic datasets spanning 12M+ records.',
-      'Led the quantitative analysis on several concurrent projects, choosing methods and running post-hoc policy analyses.',
-      'Turned statistical findings into reports, time-series visualizations, and geospatial heatmaps for non-technical stakeholders.',
-    ],
-  },
-  {
-    role: 'Web Systems Administrator',
-    org: 'Office of Student Engagement, Reed College',
-    years: '2020 – 2021',
-    points: [
-      'Maintained data integrity for 10K+ student records through SQL queries against a live platform serving 1K+ users.',
-      'Cut funding-request processing time by 80% with improved web interfaces and database automation.',
-      'Led a small student development team and acted as primary liaison to management.',
-    ],
-  },
-];
+// All homepage copy lives in /content.yaml — edit it there.
+const { site, hero, exams, work, skills, about, education, experience, contact } = content;
 ---
 
 <Base>
@@ -81,24 +26,21 @@ const experience = [
     <div class="mx-auto max-w-5xl px-5 pb-16 pt-20 sm:px-8 sm:pb-20 sm:pt-28">
       <p class="reveal flex items-center gap-2 text-[13px] font-semibold uppercase tracking-wider text-accent">
         <span class="inline-block h-1.5 w-1.5 rounded-full bg-accent"></span>
-        Vancouver, WA · Open to actuarial & analytics roles
+        {hero.eyebrow}
       </p>
 
       <h1
         class="reveal mt-5 max-w-3xl text-balance text-4xl font-bold leading-[1.07] tracking-tight sm:text-5xl md:text-6xl"
         style="animation-delay:60ms"
       >
-        Quantitative analyst &amp;<br class="hidden sm:block" /> actuarial candidate.
+        {hero.headline}
       </h1>
 
       <p
         class="reveal mt-6 max-w-2xl text-[17px] leading-relaxed text-muted sm:text-lg"
         style="animation-delay:120ms"
       >
-        I'm Ali Taqi. I work where statistics meets software — turning messy data
-        into models, and models into things you can actually use. Below are eight
-        projects from my graduate and undergraduate work at Boston University and
-        Reed College.
+        {hero.intro}
       </p>
 
       <div
@@ -132,13 +74,13 @@ const experience = [
           <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7" /></svg>
         </a>
         <a
-          href="mailto:alif.taqi00@gmail.com"
+          href={`mailto:${site.email}`}
           class="inline-flex items-center gap-2 rounded-lg border border-line px-5 py-2.5 text-[14.5px] font-semibold text-fg transition-colors hover:border-accent hover:text-accent"
         >
           Email
         </a>
         <a
-          href="https://github.com/al00shie"
+          href={site.github}
           target="_blank"
           rel="noopener"
           class="inline-flex items-center gap-2 rounded-lg border border-line px-5 py-2.5 text-[14.5px] font-semibold text-fg transition-colors hover:border-accent hover:text-accent"
@@ -153,12 +95,9 @@ const experience = [
   <section id="work" class="scroll-mt-20 border-t border-line/70">
     <div class="mx-auto max-w-5xl px-5 py-20 sm:px-8 sm:py-24">
       <div class="reveal-scroll max-w-2xl">
-        <p class="text-[13px] font-semibold uppercase tracking-wider text-accent">Selected Work</p>
-        <h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Eight projects, end to end.</h2>
-        <p class="mt-4 text-[16px] leading-relaxed text-muted">
-          Statistics, probability, and machine-learning projects from my time at
-          BU and Reed — each one links the full write-up and the code behind it.
-        </p>
+        <p class="text-[13px] font-semibold uppercase tracking-wider text-accent">{work.eyebrow}</p>
+        <h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">{work.heading}</h2>
+        <p class="mt-4 text-[16px] leading-relaxed text-muted">{work.blurb}</p>
       </div>
 
       <div class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -171,13 +110,13 @@ const experience = [
   <section id="skills" class="scroll-mt-20 border-t border-line/70 bg-panel-2/40">
     <div class="mx-auto max-w-5xl px-5 py-20 sm:px-8 sm:py-24">
       <div class="reveal-scroll max-w-2xl">
-        <p class="text-[13px] font-semibold uppercase tracking-wider text-accent">Toolkit</p>
-        <h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">What I work with.</h2>
+        <p class="text-[13px] font-semibold uppercase tracking-wider text-accent">{skills.eyebrow}</p>
+        <h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">{skills.heading}</h2>
       </div>
 
       <div class="mt-12 grid grid-cols-1 gap-10 sm:grid-cols-3">
         {
-          skillGroups.map((g) => (
+          skills.groups.map((g) => (
             <div>
               <h3 class="text-[14px] font-semibold uppercase tracking-wide text-fg">{g.title}</h3>
               <ul class="mt-4 flex flex-wrap gap-2">
@@ -197,21 +136,10 @@ const experience = [
     <div class="mx-auto max-w-5xl px-5 py-20 sm:px-8 sm:py-24">
       <div class="grid grid-cols-1 gap-14 lg:grid-cols-[1fr_1.15fr]">
         <div class="reveal-scroll max-w-md">
-          <p class="text-[13px] font-semibold uppercase tracking-wider text-accent">About</p>
-          <h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">A statistician who likes to build.</h2>
+          <p class="text-[13px] font-semibold uppercase tracking-wider text-accent">{about.eyebrow}</p>
+          <h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">{about.heading}</h2>
           <div class="mt-5 space-y-4 text-[16px] leading-relaxed text-muted">
-            <p>
-              I'm an early-career actuary and quantitative analyst based in
-              Vancouver, WA. I hold an M.A. in Statistics from Boston University
-              and a B.A. in Mathematics from Reed College, and I've passed
-              actuarial Exams P and FM — with MAS-I scheduled for July 2026.
-            </p>
-            <p>
-              My background is heavy on probability, statistical modeling, and
-              communicating results, but I'm just as comfortable writing the code
-              and building the pipeline. Most of what I make starts as a question
-              and ends as something you can read, run, or click.
-            </p>
+            {about.paragraphs.map((para) => <p>{para}</p>)}
           </div>
         </div>
 
@@ -267,22 +195,19 @@ const experience = [
     <div class="mx-auto max-w-5xl px-5 py-20 sm:px-8 sm:py-24">
       <div class="flex flex-col items-start justify-between gap-8 md:flex-row md:items-end">
         <div class="reveal-scroll max-w-xl">
-          <p class="text-[13px] font-semibold uppercase tracking-wider text-accent">Contact</p>
-          <h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">Let's talk.</h2>
-          <p class="mt-4 text-[16px] leading-relaxed text-muted">
-            I'm open to actuarial and quantitative-analytics roles. Email is the
-            fastest way to reach me — I read everything.
-          </p>
+          <p class="text-[13px] font-semibold uppercase tracking-wider text-accent">{contact.eyebrow}</p>
+          <h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">{contact.heading}</h2>
+          <p class="mt-4 text-[16px] leading-relaxed text-muted">{contact.blurb}</p>
         </div>
         <div class="flex flex-wrap gap-3">
           <a
-            href="mailto:alif.taqi00@gmail.com"
+            href={`mailto:${site.email}`}
             class="inline-flex items-center gap-2 rounded-lg bg-navy px-5 py-2.5 text-[14.5px] font-semibold text-white transition-transform hover:-translate-y-0.5"
           >
-            alif.taqi00@gmail.com
+            {site.email}
           </a>
           <a
-            href="https://github.com/al00shie"
+            href={site.github}
             target="_blank"
             rel="noopener"
             class="inline-flex items-center gap-2 rounded-lg border border-line px-5 py-2.5 text-[14.5px] font-semibold text-fg transition-colors hover:border-accent hover:text-accent"

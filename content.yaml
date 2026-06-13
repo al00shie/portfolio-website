@@ -1,0 +1,133 @@
+# ============================================================================
+#  content.yaml — the single place to edit ALL of the site's text.
+#
+#  Change copy here, then run `npm run build` (or `npm run dev` to preview live).
+#  Project write-ups live separately, one markdown file each, in
+#  src/content/projects/*.md.
+#
+#  YAML tips:  • lines starting with #  are comments (ignored)
+#              • the  >-  marks a block of prose you can wrap freely
+#              • keep the indentation (2 spaces) as-is
+# ============================================================================
+
+# --- Identity & SEO (browser tab title, search snippet, social card, links) -
+site:
+  name: Ali Taqi
+  initials: AT                 # the small square logo in the top-left
+  title: "Ali Taqi — Quantitative Analyst & Actuarial Candidate"
+  description: "Portfolio of Ali Taqi: actuarial candidate (Exam P & FM) and quantitative analyst. Statistics, probability, and machine-learning projects from Boston University and Reed College."
+  email: alif.taqi00@gmail.com
+  github: https://github.com/al00shie
+
+# --- Top navigation links ---------------------------------------------------
+nav:
+  - { label: Work, href: "/#work" }
+  - { label: About, href: "/#about" }
+  - { label: Contact, href: "/#contact" }
+
+# --- Hero: the big intro at the top of the homepage -------------------------
+hero:
+  eyebrow: "Vancouver, WA · Open to actuarial & analytics roles"
+  headline: Quantitative analyst & actuarial candidate.
+  intro: >-
+    I'm Ali Taqi. I work where statistics meets software — turning messy data
+    into models, and models into things you can actually use. Below are eight
+    projects from my graduate and undergraduate work at Boston University and
+    Reed College.
+
+# --- Actuarial exam badges (under the hero) ---------------------------------
+#  passed: true  → shows a checkmark.   passed: false → shows a dot.
+#  note: the status text shown after the name (e.g. "Passed" or a date).
+exams:
+  - { name: Exam P,  note: Passed,   passed: true }
+  - { name: Exam FM, note: Passed,   passed: true }
+  - { name: MAS-I,   note: Jul 2026, passed: false }
+
+# --- "Selected Work" section heading ----------------------------------------
+work:
+  eyebrow: Selected Work
+  heading: Eight projects, end to end.
+  blurb: >-
+    Statistics, probability, and machine-learning projects from my time at
+    BU and Reed — each one links the full write-up and the code behind it.
+
+# --- Skills / toolkit -------------------------------------------------------
+skills:
+  eyebrow: Toolkit
+  heading: What I work with.
+  groups:
+    - title: Statistics & Modeling
+      items:
+        - Regression & GLMs
+        - Survival analysis
+        - Time-series forecasting
+        - Statistical inference
+        - Monte Carlo simulation
+        - Machine learning
+    - title: Programming & Data
+      items:
+        - R · tidyverse
+        - Python
+        - SQL
+        - MATLAB
+        - VBA · Excel
+        - Git
+    - title: Actuarial & Domain
+      items:
+        - Probability
+        - Financial mathematics
+        - Econometrics
+        - Predictive modeling
+        - Insurance fundamentals
+
+# --- About ------------------------------------------------------------------
+about:
+  eyebrow: About
+  heading: A statistician who likes to build.
+  paragraphs:
+    - >-
+      I'm an early-career actuary and quantitative analyst based in Vancouver, WA.
+      I hold an M.A. in Statistics from Boston University and a B.A. in Mathematics
+      from Reed College, and I've passed actuarial Exams P and FM — with MAS-I
+      scheduled for July 2026.
+    - >-
+      My background is heavy on probability, statistical modeling, and communicating
+      results, but I'm just as comfortable writing the code and building the pipeline.
+      Most of what I make starts as a question and ends as something you can read,
+      run, or click.
+
+# --- Education --------------------------------------------------------------
+education:
+  - school: Boston University
+    degree: M.A. Statistics
+    years: 2021 – 2023
+    detail: Financial Derivatives · Stochastic Processes · Generalized Linear Models
+  - school: Reed College
+    degree: B.A. Mathematics
+    years: 2017 – 2021
+    detail: Econometrics · Statistical Learning · Data Science
+
+# --- Experience -------------------------------------------------------------
+experience:
+  - role: Research Affiliate
+    org: Pardee School of Global Studies, Boston University
+    years: 2023 – 2025
+    points:
+      - Built automated R and Excel pipelines to clean, validate, and analyze 15+ economic and demographic datasets spanning 12M+ records.
+      - Led the quantitative analysis on several concurrent projects, choosing methods and running post-hoc policy analyses.
+      - Turned statistical findings into reports, time-series visualizations, and geospatial heatmaps for non-technical stakeholders.
+  - role: Web Systems Administrator
+    org: Office of Student Engagement, Reed College
+    years: 2020 – 2021
+    points:
+      - Maintained data integrity for 10K+ student records through SQL queries against a live platform serving 1K+ users.
+      - Cut funding-request processing time by 80% with improved web interfaces and database automation.
+      - Led a small student development team and acted as primary liaison to management.
+
+# --- Contact ----------------------------------------------------------------
+contact:
+  eyebrow: Contact
+  heading: Let's talk.
+  blurb: >-
+    I'm open to actuarial and quantitative-analytics roles. Email is the fastest
+    way to reach me — I read everything.
