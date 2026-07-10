@@ -21,8 +21,10 @@ methods:
 repo: https://github.com/al00shie/couldabeens
 repoLabel: al00shie/couldabeens
 paper: /papers/luxury-tax.pdf
-image: /figures/luxury-tax.jpg
-imageAlt: Scatterplot of the yearly proportion of "couldabeen" retirees from 1970 to 2020 with a fitted trend line.
+images:
+  - src: /figures/luxury-tax.jpg
+    alt: Scatterplot of the yearly proportion of "couldabeen" retirees from 1970 to 2020 with a fitted trend line.
+    thumbnail: true
 ---
 
 In 2003 Major League Baseball introduced a competitive-balance ("luxury") tax to rein in team payrolls. We asked whether it carried an unintended cost: did it push still-capable players into early retirement? We define a **"couldabeen"** as a player who retired in a season when he was still outperforming the average rookie — measured by Wins Above Replacement — and tracked the yearly proportion of such retirements across roughly fifty seasons.

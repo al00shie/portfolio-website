@@ -91,46 +91,6 @@ const { site, hero, exams, work, skills, about, education, experience, contact }
     </div>
   </section>
 
-  <!-- ───────────────────────── Work ───────────────────────── -->
-  <section id="work" class="scroll-mt-20 border-t border-line/70">
-    <div class="mx-auto max-w-5xl px-5 py-20 sm:px-8 sm:py-24">
-      <div class="reveal-scroll max-w-2xl">
-        <p class="text-[13px] font-semibold uppercase tracking-wider text-accent">{work.eyebrow}</p>
-        <h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">{work.heading}</h2>
-        <p class="mt-4 text-[16px] leading-relaxed text-muted">{work.blurb}</p>
-      </div>
-
-      <div class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
-        {projects.map((project) => <ProjectCard project={project} />)}
-      </div>
-    </div>
-  </section>
-
-  <!-- ───────────────────────── Skills ──────────────────────── -->
-  <section id="skills" class="scroll-mt-20 border-t border-line/70 bg-panel-2/40">
-    <div class="mx-auto max-w-5xl px-5 py-20 sm:px-8 sm:py-24">
-      <div class="reveal-scroll max-w-2xl">
-        <p class="text-[13px] font-semibold uppercase tracking-wider text-accent">{skills.eyebrow}</p>
-        <h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">{skills.heading}</h2>
-      </div>
-
-      <div class="mt-12 grid grid-cols-1 gap-10 sm:grid-cols-3">
-        {
-          skills.groups.map((g) => (
-            <div>
-              <h3 class="text-[14px] font-semibold uppercase tracking-wide text-fg">{g.title}</h3>
-              <ul class="mt-4 flex flex-wrap gap-2">
-                {g.items.map((item) => (
-                  <li class="rounded-md border border-line bg-panel px-3 py-1.5 text-[13.5px] text-muted">{item}</li>
-                ))}
-              </ul>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-  </section>
-
   <!-- ───────────────────────── About ──────────────────────── -->
   <section id="about" class="scroll-mt-20 border-t border-line/70">
     <div class="mx-auto max-w-5xl px-5 py-20 sm:px-8 sm:py-24">
@@ -186,6 +146,46 @@ const { site, hero, exams, work, skills, about, education, experience, contact }
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── Skills ──────────────────────── -->
+  <section id="skills" class="scroll-mt-20 border-t border-line/70 bg-panel-2/40">
+    <div class="mx-auto max-w-5xl px-5 py-20 sm:px-8 sm:py-24">
+      <div class="reveal-scroll max-w-2xl">
+        <p class="text-[13px] font-semibold uppercase tracking-wider text-accent">{skills.eyebrow}</p>
+        <h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">{skills.heading}</h2>
+      </div>
+
+      <div class="mt-12 grid grid-cols-1 gap-10 sm:grid-cols-3">
+        {
+          skills.groups.map((g) => (
+            <div>
+              <h3 class="text-[14px] font-semibold uppercase tracking-wide text-fg">{g.title}</h3>
+              <ul class="mt-4 flex flex-wrap gap-2">
+                {g.items.map((item) => (
+                  <li class="rounded-md border border-line bg-panel px-3 py-1.5 text-[13.5px] text-muted">{item}</li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────────────────── Work ───────────────────────── -->
+  <section id="work" class="scroll-mt-20 border-t border-line/70">
+    <div class="mx-auto max-w-5xl px-5 py-20 sm:px-8 sm:py-24">
+      <div class="reveal-scroll max-w-2xl">
+        <p class="text-[13px] font-semibold uppercase tracking-wider text-accent">{work.eyebrow}</p>
+        <h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">{work.heading}</h2>
+        <p class="mt-4 text-[16px] leading-relaxed text-muted">{work.blurb}</p>
+      </div>
+
+      <div class="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2">
+        {projects.map((project) => <ProjectCard project={project} />)}
       </div>
     </div>
   </section>

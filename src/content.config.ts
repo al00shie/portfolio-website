@@ -9,10 +9,6 @@ const projects = defineCollection({
     featured: z.boolean().default(true),
     tagline: z.string(),
     summary: z.string(),
-    school: z.string(),
-    credential: z.string(),
-    course: z.string(),
-    year: z.string(),
     role: z.string(),
     collaborators: z.array(z.string()).default([]),
     methods: z.array(z.string()).default([]),
@@ -22,8 +18,16 @@ const projects = defineCollection({
     liveDemo: z.string().url().optional(),
     liveCode: z.string().optional(),
     interactive: z.enum(['semicircle', 'stylometry', 'survival']).optional(),
-    image: z.string(),
-    imageAlt: z.string(),
+    images: z
+      .array(
+        z.object({
+          src: z.string(),
+          alt: z.string(),
+          caption: z.string().optional(),
+          thumbnail: z.boolean().optional(), // marks the homepage card image
+        }),
+      )
+      .default([]),
     animation: z
       .object({
         webm: z.string(),

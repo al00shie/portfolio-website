@@ -9,6 +9,7 @@ const { project } = Astro.props;
 const d = project.data;
 const href = `/projects/${project.id}`;
 const tags = d.methods.slice(0, 3);
+const thumb = d.images.find((i) => i.thumbnail) ?? d.images[0];
 ---
 
 <a
@@ -16,21 +17,19 @@ const tags = d.methods.slice(0, 3);
   class="reveal-scroll group flex flex-col overflow-hidden rounded-xl border border-line bg-panel transition-all duration-200 hover:-translate-y-1 hover:border-accent/60 hover:shadow-[0_12px_40px_-12px_rgba(33,94,153,0.28)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
 >
   <div class="relative aspect-[16/10] overflow-hidden bg-white">
-    <img
-      src={d.image}
-      alt={d.imageAlt}
-      loading="lazy"
-      decoding="async"
-      class="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
-    />
+    {thumb && (
+      <img
+        src={thumb.src}
+        alt={thumb.alt}
+        loading="lazy"
+        decoding="async"
+        class="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+      />
+    )}
     <div class="absolute inset-0 ring-1 ring-inset ring-black/5"></div>
   </div>
 
   <div class="flex flex-1 flex-col gap-3 p-5">
-    <p class="tnum text-[12px] font-medium uppercase tracking-wider text-faint">
-      {d.school} · {d.course} · {d.year}
-    </p>
-
     <div class="space-y-1.5">
       <h3 class="text-[17px] font-semibold leading-snug tracking-tight text-fg" transition:name={`title-${project.id}`}>
         {d.title}

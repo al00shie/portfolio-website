@@ -19,8 +19,10 @@ methods:
   - R
 liveCode: /live/mcmc
 paper: /papers/poisson-three-ways.pdf
-image: /figures/poisson-three-ways.jpg
-imageAlt: Three-dimensional surface of the joint prior density over the two Poisson-GLM coefficients.
+images:
+  - src: /figures/poisson-three-ways.jpg
+    alt: Three-dimensional surface of the joint prior density over the two Poisson-GLM coefficients.
+    thumbnail: true
 animation:
   webm: /anim/mcmc.webm
   mp4: /anim/mcmc.mp4

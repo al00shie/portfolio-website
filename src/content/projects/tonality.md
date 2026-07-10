@@ -19,8 +19,10 @@ methods:
 repo: https://github.com/al00shie/tonality576
 repoLabel: al00shie/tonality576
 paper: /papers/tonality.pdf
-image: /figures/tonality.jpg
-imageAlt: World map of 527 languages overlaid on a global mean-humidity heatmap, points colored by tonality type.
+images:
+  - src: /figures/tonality.jpg
+    alt: World map of 527 languages overlaid on a global mean-humidity heatmap, points colored by tonality type.
+    thumbnail: true
 interactive: survival
 ---
 

@@ -14,8 +14,8 @@
 site:
   name: Ali Taqi
   initials: AT                 # the small square logo in the top-left
-  title: "Ali Taqi — Quantitative Analyst & Actuarial Candidate"
-  description: "Portfolio of Ali Taqi: actuarial candidate (Exam P & FM) and quantitative analyst. Statistics, probability, and machine-learning projects from Boston University and Reed College."
+  title: "Ali Taqi - Portfolio"
+  description: "Portfolio of Ali Taqi: Actuarial Candidate and Data Scientist. Projects in Statistics and Machine Learning."
   email: alif.taqi00@gmail.com
   github: https://github.com/al00shie
 
@@ -27,29 +27,26 @@ nav:
 
 # --- Hero: the big intro at the top of the homepage -------------------------
 hero:
-  eyebrow: "Vancouver, WA · Open to actuarial & analytics roles"
-  headline: Quantitative analyst & actuarial candidate.
+  eyebrow: "Open to Actuarial & Analytics roles"
+  headline: Actuarial Candidate & Data Scientist
   intro: >-
-    I'm Ali Taqi. I work where statistics meets software — turning messy data
-    into models, and models into things you can actually use. Below are eight
-    projects from my graduate and undergraduate work at Boston University and
-    Reed College.
+    Hi! I'm Ali. I work where statistics meets software — turning messy data
+    into models, and models into things you can actually use. Below are some of my 
+    projects showcasing some of my undergraduate and graduate work, and beyond.
 
 # --- Actuarial exam badges (under the hero) ---------------------------------
 #  passed: true  → shows a checkmark.   passed: false → shows a dot.
 #  note: the status text shown after the name (e.g. "Passed" or a date).
 exams:
-  - { name: Exam P,  note: Passed,   passed: true }
-  - { name: Exam FM, note: Passed,   passed: true }
-  - { name: MAS-I,   note: Jul 2026, passed: false }
+  - { name: Exam P,  note: Passed • Mar 2026,   passed: true }
+  - { name: Exam FM, note: Passed • Feb 2026,   passed: true }
 
 # --- "Selected Work" section heading ----------------------------------------
 work:
   eyebrow: Selected Work
-  heading: Eight projects, end to end.
+  heading: Seven projects, end to end.
   blurb: >-
-    Statistics, probability, and machine-learning projects from my time at
-    BU and Reed — each one links the full write-up and the code behind it.
+    Statistics, probability, and machine-learning projects — each one links the full write-up and the code behind it.
 
 # --- Skills / toolkit -------------------------------------------------------
 skills:
@@ -59,26 +56,23 @@ skills:
     - title: Statistics & Modeling
       items:
         - Regression & GLMs
-        - Survival analysis
-        - Time-series forecasting
-        - Statistical inference
-        - Monte Carlo simulation
-        - Machine learning
+        - Survival Analysis
+        - Time-Series Forecasting
+        - Statistical Inference
+        - Monte Carlo Simulation
+        - Machine Learning
     - title: Programming & Data
       items:
         - R · tidyverse
         - Python
         - SQL
-        - MATLAB
-        - VBA · Excel
+        - Excel · VBA
         - Git
-    - title: Actuarial & Domain
+    - title: Actuarial
       items:
-        - Probability
-        - Financial mathematics
+        - Financial Mathematics
         - Econometrics
-        - Predictive modeling
-        - Insurance fundamentals
+        - Predictive Modeling
 
 # --- About ------------------------------------------------------------------
 about:
@@ -86,10 +80,9 @@ about:
   heading: A statistician who likes to build.
   paragraphs:
     - >-
-      I'm an early-career actuary and quantitative analyst based in Vancouver, WA.
+      I'm an early-career data scientist and statistician based in Portland, OR metro area.
       I hold an M.A. in Statistics from Boston University and a B.A. in Mathematics
-      from Reed College, and I've passed actuarial Exams P and FM — with MAS-I
-      scheduled for July 2026.
+      from Reed College, and I've passed actuarial Exams P and FM.
     - >-
       My background is heavy on probability, statistical modeling, and communicating
       results, but I'm just as comfortable writing the code and building the pipeline.
@@ -109,7 +102,7 @@ education:
 
 # --- Experience -------------------------------------------------------------
 experience:
-  - role: Research Affiliate
+  - role: Research Associate
     org: Pardee School of Global Studies, Boston University
     years: 2023 – 2025
     points:
@@ -129,5 +122,5 @@ contact:
   eyebrow: Contact
   heading: Let's talk.
   blurb: >-
-    I'm open to actuarial and quantitative-analytics roles. Email is the fastest
+    I'm open to actuarial and analytical roles in insurance. Email is the fastest
     way to reach me — I read everything.

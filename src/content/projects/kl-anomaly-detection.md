@@ -22,8 +22,10 @@ methods:
 repo: https://github.com/yulinl2/Change_Detection_Machine_Learning
 repoLabel: yulinl2/Change_Detection_Machine_Learning
 paper: /papers/kl-anomaly-detection.pdf
-image: /figures/kl-anomaly-detection.jpg
-imageAlt: Multiclass SVM decision boundaries separating three labeled point clusters in the plane.
+images:
+  - src: /figures/kl-anomaly-detection.jpg
+    alt: Multiclass SVM decision boundaries separating three labeled point clusters in the plane.
+    thumbnail: true
 ---
 
 This project tackles a recurring machine-learning problem: spotting anomalous signals — data that doesn't belong to a known reference class. The idea borrows from functional analysis. A **Karhunen–Loève expansion** (the function-space generalization of PCA) is trained on a single reference class to estimate its eigenspace; new observations are then projected onto the subspaces *outside* that eigenspace, and the energy in those projections becomes a feature vector for a support-vector-machine classifier.

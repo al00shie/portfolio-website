@@ -19,8 +19,12 @@ methods:
 repo: https://github.com/al00shie/bikes575
 repoLabel: al00shie/bikes575
 paper: /papers/bike-share.pdf
-image: /figures/bike-share.jpg
-imageAlt: Fitted versus actual daily registered ridership across 2011, with weekday and holiday observations marked.
+images:
+  - src: /figures/bike-share.jpg
+    alt: Fitted versus actual daily registered ridership across 2011, with weekday and holiday observations marked.
+    thumbnail: true
+  - src: /figures/bike-share2.png
+    alt: Growth ratio estimates for 2011 and 2012.
 ---
 
 Given a day's weather and season, how many people will rent a bike? Working from two years of Capital Bikeshare data, our team built multiple-regression models predicting daily ridership from temperature, humidity, windspeed, weather, and calendar features — with interaction terms for how a hot day plays differently on a workday than on a weekend.

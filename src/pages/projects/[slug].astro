@@ -7,9 +7,10 @@ import StylometryExplorer from '../../components/StylometryExplorer.astro';
 import SurvivalExplorer from '../../components/SurvivalExplorer.astro';
 
 export async function getStaticPaths() {
-  const sorted = (await getCollection('projects')).sort(
-    (a, b) => a.data.order - b.data.order,
-  );
+  // Only featured projects get a page — hidden ones (featured: false) are fully inaccessible.
+  const sorted = (await getCollection('projects'))
+    .filter((p) => p.data.featured)
+    .sort((a, b) => a.data.order - b.data.order);
   return sorted.map((project, i) => ({
     params: { slug: project.id },
     props: {
@@ -24,7 +25,10 @@ const { project, prev, next } = Astro.props;
 const d = project.data;
 const { Content } = await render(project);
 
-const meta = [d.school, d.credential, d.course, d.year, d.role].filter(Boolean);
+const meta = [d.role].filter(Boolean);
+
+const thumb = d.images.find((i) => i.thumbnail) ?? d.images[0];
+const gallery = d.images.filter((i) => i !== thumb);
 ---
 
 <Base title={`${d.title} — Ali Taqi`} description={d.summary}>
@@ -110,14 +114,25 @@ const meta = [d.school, d.credential, d.course, d.year, d.role].filter(Boolean);
           width={d.animation.width}
           height={d.animation.height}
         />
-      ) : (
+      ) : thumb ? (
         <figure class="mt-10">
           <div class="overflow-hidden rounded-xl border border-line bg-white">
-            <img src={d.image} alt={d.imageAlt} class="w-full" />
+            <img src={thumb.src} alt={thumb.alt} class="w-full" />
           </div>
-          <figcaption class="mt-3 text-[13px] leading-relaxed text-faint">{d.imageAlt}</figcaption>
+          <figcaption class="mt-3 text-[13px] leading-relaxed text-faint">{thumb.caption ?? thumb.alt}</figcaption>
         </figure>
-      )
+      ) : null
+    }
+
+    {
+      gallery.map((img) => (
+        <figure class="mt-8">
+          <div class="overflow-hidden rounded-xl border border-line bg-white">
+            <img src={img.src} alt={img.alt} loading="lazy" decoding="async" class="w-full" />
+          </div>
+          <figcaption class="mt-3 text-[13px] leading-relaxed text-faint">{img.caption ?? img.alt}</figcaption>
+        </figure>
+      ))
     }
 
     <div class="mt-9 flex flex-wrap gap-2">
