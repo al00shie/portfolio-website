@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Fingerprinting Composers — Ali Taqi</title>
+<style>
+  :root {
+    --navy: #215e99;
+    --fg: #16191d;
+    --muted: #565f6b;
+    --faint: #8a93a0;
+    --line: #e7e4db;
+    --panel: #f4f2ec;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: var(--fg);
+    font-size: 10.5pt;
+    line-height: 1.62;
+    font-feature-settings: "kern", "liga";
+  }
+
+  /* ---- Title block ---- */
+  .kicker {
+    font-size: 8pt;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--navy);
+  }
+  h1 {
+    margin-top: 10pt;
+    font-size: 27pt;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.08;
+  }
+  .standfirst {
+    margin-top: 12pt;
+    font-size: 12pt;
+    line-height: 1.5;
+    color: var(--muted);
+    max-width: 34em;
+  }
+  .byline {
+    margin-top: 14pt;
+    padding-top: 10pt;
+    border-top: 1px solid var(--line);
+    font-size: 9pt;
+    color: var(--faint);
+  }
+  .byline b { color: var(--fg); font-weight: 650; }
+  .byline .sep { margin: 0 6pt; }
+  .titleblock { padding-bottom: 6pt; border-bottom: 2px solid var(--navy); margin-bottom: 18pt; }
+
+  /* ---- Body ---- */
+  h2 {
+    font-size: 14pt;
+    font-weight: 750;
+    letter-spacing: -0.01em;
+    color: var(--navy);
+    margin-top: 15pt;
+    margin-bottom: 6pt;
+    break-after: avoid;
+  }
+  p { margin-block: 6.5pt; text-wrap: pretty; }
+  strong { font-weight: 700; }
+  em { font-style: italic; }
+  a { color: var(--navy); text-decoration: underline; text-underline-offset: 2px; }
+  ul { margin: 7pt 0 7pt 1.4em; }
+  li { margin-block: 3.5pt; }
+  li::marker { color: var(--navy); }
+  code {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 0.86em;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 0.5pt 3pt;
+  }
+
+  /* ---- Figures ---- */
+  figure {
+    margin: 9pt auto;
+    width: 66%;
+    break-inside: avoid;
+  }
+  figure img {
+    display: block;
+    width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+  figcaption {
+    margin-top: 5pt;
+    font-size: 8.5pt;
+    line-height: 1.5;
+    color: var(--faint);
+  }
+  figcaption b { color: var(--muted); font-weight: 700; }
+
+  /* ---- Coda ---- */
+  .coda {
+    margin-top: 16pt;
+    padding: 12pt 14pt;
+    background: var(--panel);
+    border-radius: 8px;
+    font-size: 9.5pt;
+    color: var(--muted);
+    break-inside: avoid;
+  }
+  .coda p { margin-block: 5pt; }
+
+  .pagebreak { break-before: page; }
+  figure.genre { width: 58%; }
+</style>
+</head>
+<body>
+
+<header class="titleblock">
+  <div class="kicker">Report · Music × Statistics</div>
+  <h1>Fingerprinting Composers</h1>
+  <p class="standfirst">
+    Stylometry catches anonymous authors by counting their word habits. In my junior year at
+    Reed, a friend and I pointed the same idea at sheet music — and the composers gave
+    themselves away.
+  </p>
+  <p class="byline">
+    <b>Ali Taqi</b><span class="sep">·</span>July 12, 2026<span class="sep">·</span>ali-taqi.com<span class="sep">·</span>with Lucas Yong
+  </p>
+</header>
+
+<p>There’s a <a href="https://www.bbc.co.uk/archive/toddler-identifies-classical-music-composers/zrkn2sg">BBC clip of a toddler identifying classical composers</a> by ear. She hasn’t studied theory; she can’t tell you what a plagal cadence is. But something in Chopin reliably reads as <em>Chopin</em> to her, and something in Bach reads as <em>Bach</em>. Whatever that something is, it’s stable enough that a two-year-old’s pattern-matching can latch onto it.</p>
+
+<p>That’s a claim about statistics, not just about music: style leaves fingerprints, and fingerprints can be counted. This report is the story of a project where I tried to count them.</p>
+
+<h2>From Words to Notes</h2>
+
+<p>Stylometry is the discipline of identifying authors by their measurable habits. The classic result is Mosteller and Wallace’s analysis of the <em>Federalist Papers</em>: the disputed essays were attributed to Madison not by their grand arguments but by their boring little function words — how often the author reached for “upon” versus “on.” Style, it turns out, lives less in what you say than in the tics you can’t help.</p>
+
+<p>Musicians have tics too. Chopin loves borrowing the minor iv chord in a major key. Joplin’s rags lean into dissonances that would have made Vivaldi’s patrons squirm. If word frequencies can fingerprint an essayist, harmonic frequencies ought to fingerprint a composer.</p>
+
+<p>In the spring of my junior year at Reed, my friend Lucas Yong and I got the chance to actually test this, as our final project for the data science course. The direct inspiration was the <a href="https://github.com/empalmer/museR/blob/master/thesis.pdf">senior thesis</a> of Emily Palmer (’18), who had built <a href="https://github.com/empalmer/museR"><code>museR</code></a>, an R package for turning sheet music into data frames. With her blessing, we refactored parts of <code>museR</code> and built our own harmony module on top of it. Everything below is joint work with Lucas — one of those collaborations where I genuinely can’t remember who wrote which half.</p>
+
+<h2>Music as a Data Frame</h2>
+
+<p>The first decision was what “music as data” even means. Audio is the obvious answer and the wrong one for this question — a recording confounds the <em>composition</em> with the performer, the instrument, and the room. We wanted the choices the composer actually wrote down, so we worked from <strong>sheet music</strong> in the Kern format: plain-text symbolic scores, of which <a href="https://kern.humdrum.org/">kern.humdrum.org</a> hosts over a hundred thousand.</p>
+
+<p>A <code>.krn</code> file slices a piece into rows at the finest rhythmic grid the piece uses — if the fastest note is a sixteenth, a 4/4 bar contributes sixteen rows. Each row is a vertical slice of the score: every note sounding at that instant, plus the current key, meter, and measure. <code>museR</code>’s <code>kern2df()</code> turns that into a data frame, and suddenly <em>The Entertainer</em> is 588 rows × 45 columns and you can <code>group_by()</code> it like anything else.</p>
+
+<h2>The Enharmonic Problem</h2>
+
+<p>Here’s the part of the project I’m still proud of. To measure harmonic habits you need to know each note’s <strong>scale degree</strong> — its role relative to the key. And scale degrees are where naive note-encoding falls apart, because of <strong>enharmonics</strong>: C♯ and D♭ are the same piano key but <em>not</em> the same musical object. Against a G, C♯ is an augmented fourth and D♭ is a diminished fifth — same sound, different grammar, and a composer’s choice of spelling encodes which grammar they meant.</p>
+
+<p>So the heart of our module was a pair of functions: <code>enharmonic()</code>, which handles respelling (it knows <code>Cb</code> is <code>B</code>, and that <code>E#</code> is <code>F</code>), and <code>scaleDegree(tonic, note)</code>, which classifies any note against any tonic — <code>scaleDegree("C", "Eb")</code> comes back as a flat third, <code>scaleDegree("F#", "C#")</code> as a perfect fifth. It sounds like a lookup table; it is in fact four source files of fiddly edge cases. Music notation is a legacy format with about eight centuries of backwards compatibility, and it fights you.</p>
+
+<h2>Four Ways to Sound Like Yourself</h2>
+
+<p>With scale degrees in hand, we scored every piece on four harmonic features — how often, per note, the composer reaches outside the plain major/minor palette, and in which direction:</p>
+
+<ul>
+  <li><strong>Bluesiness</strong> — borrowing from the blues scale (the flat third, flat seventh, and their friends).</li>
+  <li><strong>Modal interchange</strong> — garden-variety mode mixture: notes borrowed from the parallel major or minor.</li>
+  <li><strong>Subdominant borrowing</strong> — a specific habit worth isolating: taking the iv chord from minor while in major (the “minor plagal” sound).</li>
+  <li><strong>Consonance / dissonance</strong> — not strictly modal, but a running measure of how much friction the composer tolerates.</li>
+</ul>
+
+<p>Our corpus: fifteen-plus pieces each from <strong>Bach, Beethoven, Chopin, Joplin, and Vivaldi</strong>, plus fifteen-plus each from five <em>genres</em> — etudes, fugues, preludes, ragtime, and waltzes — for the rhythm analysis later.</p>
+
+<h2>What the Composers Gave Away</h2>
+
+<figure>
+  <img src="../../public/figures/blog/stylometry-consonance.jpg" alt="Boxplots of average composition consonance by composer." />
+  <figcaption><b>Figure 1.</b> Consonance by composer. Beethoven runs high and tight; Chopin and Vivaldi range widely. Figures are from the original 2021 analysis.</figcaption>
+</figure>
+
+<p>The features genuinely separate the composers, and mostly in directions a musician would predict — which is exactly what you want from a sanity check.</p>
+
+<p>The baroque composers behaved themselves: <strong>Bach and Vivaldi score lowest on bluesiness</strong>, which is reassuring, since blue notes weren’t really on the menu in 1720. <strong>Joplin tops the dissonance chart</strong>, befitting ragtime’s cheerful crunch. And my favorite result: <strong>Chopin sits near the top on subdominant borrowing</strong>. That minor-iv-in-major move is one of the signature sounds that makes Chopin sound like Chopin — it’s genuinely satisfying when a statistic you computed from plain-text files rediscovers something your ears already knew.</p>
+
+<figure>
+  <img src="../../public/figures/blog/stylometry-subdominant.jpg" alt="Boxplots of average subdominant borrowing by composer." />
+  <figcaption><b>Figure 2.</b> Subdominant borrowing by composer — the “minor plagal” habit. Chopin, famous for exactly this move, sits near the top.</figcaption>
+</figure>
+
+<p>And then there’s the anomaly. <strong>Beethoven came out bluesiest</strong> — comfortably above Joplin, the man who wrote actual rags.</p>
+
+<figure>
+  <img src="../../public/figures/blog/stylometry-bluesiness.jpg" alt="Boxplots of average bluesiness by composer, with Beethoven unexpectedly highest." />
+  <figcaption><b>Figure 3.</b> Bluesiness by composer. Beethoven on top is almost certainly an artifact — his sample was the smallest — but we never fully ran it down.</figcaption>
+</figure>
+
+<p>We treated that result with suspicion then and I still do: Beethoven’s was our smallest sample, because his Kern files gave the parser the most trouble. But we re-checked the pipeline and found no bug — the flat thirds and sevenths are really there in the pieces we sampled. Somewhere between “small-sample artifact” and “Beethoven’s chromaticism genuinely overlaps the blues scale,” there’s a real answer we never ran down. It remains my favorite kind of result: the one that’s probably wrong in an interesting way.</p>
+
+<h2>Rhythm Belongs to the Genre</h2>
+
+<p>Harmony turned out to be where composers live; rhythm is where <em>genres</em> live. A waltz is a waltz whoever writes it. So for the rhythm module (this part built directly on Emily’s <code>museR</code> functions) we grouped by genre instead and measured <strong>rhythmic entropy</strong> — roughly, how unpredictable the beat-to-beat rhythm is.</p>
+
+<figure class="genre">
+  <img src="../../public/figures/blog/stylometry-rhythm-entropy.png" alt="Boxplots of rhythmic entropy by genre." />
+  <figcaption><b>Figure 4.</b> Rhythmic entropy by genre. Fugues highest, ragtime tightest, and etudes all over the place — each one is a lesson, and it depends what the lesson is about.</figcaption>
+</figure>
+
+<p><strong>Fugues score highest</strong>, by design — the form exists to push rhythmic and contrapuntal variation to its limits. <strong>Ragtime is the tightest cluster</strong>: the genre has a groove and stays in it. And <strong>etudes span the whole range</strong>, which makes sense once you remember what an etude <em>is</em> — a lesson. An etude drilling harmony can be rhythmically inert; an etude drilling polyrhythm is chaos by construction.</p>
+
+<p>The cleanest single result in the whole project, though, is this one:</p>
+
+<figure class="genre">
+  <img src="../../public/figures/blog/stylometry-subdivision.png" alt="Stacked bar chart of each score's most common rhythmic subdivision by genre." />
+  <figcaption><b>Figure 5.</b> Each score’s most common rhythmic subdivision, by genre. Every single waltz lands on the quarter note — the 3/4 time signature, rediscovered from raw data.</figcaption>
+</figure>
+
+<p>Every other genre spreads across eighths and sixteenths, but <strong>every single waltz in the sample has the quarter note as its most common subdivision</strong> — zero variation. Which is to say: the analysis rediscovered the definition of a waltz. ONE-two-three, straight out of the data frame.</p>
+
+<h2>What I’d Do Differently Now</h2>
+
+<p>This project is five years old, and I’ve since finished a master’s in statistics, so I owe 2021-me an honest review. The feature engineering holds up — scale-degree classification was the right hard problem to solve, and the features are musically meaningful rather than merely convenient. What doesn’t hold up is the inference: we compared distributions by eyeballing boxplots, with no uncertainty attached, and never held out test data. The real test of a fingerprint isn’t “do the boxplots look different” — it’s <em>attribution</em>: train a classifier, hand it a piece it has never seen, and see if it can name the composer. With these five features I’d bet on it beating chance comfortably; how comfortably is exactly the question worth answering.</p>
+
+<p>The upgrade list writes itself from there: pool pieces within composers hierarchically instead of averaging per piece and hoping; treat harmony as a <em>process</em> by tracking features measure-by-measure through a piece rather than as one bag of notes per score; and scale the corpus up, since kern.humdrum.org has a hundred thousand scores and we used about a hundred and fifty.</p>
+
+<p>And there’s a destination worth aiming at. The reason Emily’s thesis stuck with me is a genuinely open attribution problem: several pieces published under Felix Mendelssohn’s name are suspected to be the work of his sister, Fanny Hensel. Musicologists argue from letters and circumstance. A harmonic fingerprint good enough to attribute held-out pieces would get to cast an actual, quantified vote. That’s the dream version of this project, and it still feels reachable.</p>
+
+<div class="coda">
+  <p><strong>Code &amp; data:</strong> <a href="https://github.com/Reed-Math241/music_stylo">github.com/Reed-Math241/music_stylo</a> — and there’s an interactive explorer of the composer distributions at <a href="https://ali-taqi.com/projects/music-stylometry">ali-taqi.com/projects/music-stylometry</a>. <code>museR</code> is <a href="https://github.com/empalmer/museR">Emily Palmer’s package</a>; the harmony module and the analysis above were built with Lucas Yong, to whom half the credit belongs.</p>
+  <p>I keep coming back to what the toddler in that BBC clip already knows: style isn’t mystical. It’s a distribution, and everybody’s sampling from their own. She learned hers from listening. Ours took four R files and an enharmonic edge-case function — but we got to <em>see</em> the fingerprints.</p>
+</div>
+
+</body>
+</html>

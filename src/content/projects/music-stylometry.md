@@ -18,6 +18,7 @@ methods:
   - R · ggplot2 · purrr
 repo: https://github.com/Reed-Math241/music_stylo
 repoLabel: Reed-Math241/music_stylo
+paper: /papers/music-stylometry.pdf
 images:
   - src: /figures/music-stylometry.jpg
     alt: Boxplots of average composition consonance by composer for Bach, Beethoven, Chopin, Joplin, and Vivaldi.

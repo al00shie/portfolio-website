@@ -101,6 +101,6 @@ And there's a destination worth aiming at. The reason Emily's thesis stuck with 
 
 ## Coda
 
-The code and data live in the [project repo](https://github.com/Reed-Math241/music_stylo), and there's an [interactive explorer on the project page](/projects/music-stylometry) where you can poke at the composer distributions yourself. `museR` is [Emily Palmer's package](https://github.com/empalmer/museR); the harmony module and the analysis above were built with Lucas Yong, to whom half the credit belongs.
+The code and data live in the [project repo](https://github.com/Reed-Math241/music_stylo), there's an [interactive explorer on the project page](/projects/music-stylometry) where you can poke at the composer distributions yourself, and this post is also available as a [typeset PDF report](/papers/music-stylometry.pdf). `museR` is [Emily Palmer's package](https://github.com/empalmer/museR); the harmony module and the analysis above were built with Lucas Yong, to whom half the credit belongs.
 
 I keep coming back to what the toddler in that BBC clip already knows: style isn't mystical. It's a distribution, and everybody's sampling from their own. She learned hers from listening. Ours took four R files and an enharmonic edge-case function — but we got to *see* the fingerprints.
