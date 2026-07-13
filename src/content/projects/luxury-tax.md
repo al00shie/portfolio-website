@@ -1,7 +1,7 @@
 ---
 title: The MLB Luxury Tax and the Players It Left Behind
 order: 5
-featured: true
+featured: false   # hidden from the site — set back to true to show it again
 tagline: Did baseball's salary cap push capable players into early retirement?
 summary: A statistical-inference project testing whether MLB's 2003 competitive-balance tax raised the rate of "couldabeens" — players who retired while still outperforming the average rookie — while controlling for the Moneyball revolution.
 school: Reed College
