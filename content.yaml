@@ -15,20 +15,20 @@ site:
   name: Ali Taqi
   initials: AT                 # the small square logo in the top-left
   title: "Ali Taqi - Portfolio"
-  description: "Portfolio of Ali Taqi: Actuarial Candidate and Data Scientist. Projects in Statistics and Machine Learning."
+  description: "Portfolio of Ali Taqi: Data Scientist and Statistician. Projects in Statistics and Machine Learning."
   email: alif.taqi00@gmail.com
   github: https://github.com/al00shie
 
 # --- Top navigation links ---------------------------------------------------
 nav:
-  - { label: Work, href: "/#work" }
   - { label: About, href: "/#about" }
+  - { label: Work, href: "/#work" }
   - { label: Contact, href: "/#contact" }
 
 # --- Hero: the big intro at the top of the homepage -------------------------
 hero:
-  eyebrow: "Open to Actuarial & Analytics roles"
-  headline: Actuarial Candidate & Data Scientist
+  eyebrow: ""            # small badge above the headline; leave "" to hide it
+  headline: Data Scientist & Statistician
   intro: >-
     Hi! I'm Ali. I work where statistics meets software — turning messy data
     into models, and models into things you can actually use. Below are some of my 
@@ -68,7 +68,7 @@ skills:
         - SQL
         - Excel · VBA
         - Git
-    - title: Actuarial
+    - title: Finance & Risk
       items:
         - Financial Mathematics
         - Econometrics
@@ -82,7 +82,7 @@ about:
     - >-
       I'm an early-career data scientist and statistician based in Portland, OR metro area.
       I hold an M.A. in Statistics from Boston University and a B.A. in Mathematics
-      from Reed College, and I've passed actuarial Exams P and FM.
+      from Reed College.
     - >-
       My background is heavy on probability, statistical modeling, and communicating
       results, but I'm just as comfortable writing the code and building the pipeline.
@@ -90,15 +90,25 @@ about:
       run, or click.
 
 # --- Education --------------------------------------------------------------
+#  showCoursework: false  hides the relevant-coursework line under every degree.
+#  Courses display in list order — reorder, add, or delete lines freely.
 education:
-  - school: Boston University
-    degree: M.A. Statistics
-    years: 2021 – 2023
-    detail: Financial Derivatives · Stochastic Processes · Generalized Linear Models
-  - school: Reed College
-    degree: B.A. Mathematics
-    years: 2017 – 2021
-    detail: Econometrics · Statistical Learning · Data Science
+  showCoursework: false
+  degrees:
+    - school: Boston University
+      degree: M.A. Statistics
+      years: 2021 – 2023
+      coursework:
+        - Financial Derivatives
+        - Stochastic Processes
+        - Generalized Linear Models
+    - school: Reed College
+      degree: B.A. Mathematics
+      years: 2017 – 2021
+      coursework:
+        - Econometrics
+        - Statistical Learning
+        - Data Science
 
 # --- Experience -------------------------------------------------------------
 experience:
@@ -122,5 +132,5 @@ contact:
   eyebrow: Contact
   heading: Let's talk.
   blurb: >-
-    I'm open to actuarial and analytical roles in insurance. Email is the fastest
-    way to reach me — I read everything.
+    I'm open to quantitative and analytical roles across insurance and finance.
+    Email is the fastest way to reach me — I read everything.

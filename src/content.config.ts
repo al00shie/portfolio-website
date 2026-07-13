@@ -9,7 +9,7 @@ const projects = defineCollection({
     featured: z.boolean().default(true),
     tagline: z.string(),
     summary: z.string(),
-    role: z.string(),
+    role: z.string().optional(), // no longer displayed; kept so existing frontmatter still parses
     collaborators: z.array(z.string()).default([]),
     methods: z.array(z.string()).default([]),
     repo: z.string().url().optional(),

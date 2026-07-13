@@ -24,10 +24,14 @@ const { site, hero, exams, work, skills, about, education, experience, contact }
     </div>
 
     <div class="mx-auto max-w-5xl px-5 pb-16 pt-20 sm:px-8 sm:pb-20 sm:pt-28">
-      <p class="reveal flex items-center gap-2 text-[13px] font-semibold uppercase tracking-wider text-accent">
-        <span class="inline-block h-1.5 w-1.5 rounded-full bg-accent"></span>
-        {hero.eyebrow}
-      </p>
+      {
+        hero.eyebrow && (
+          <p class="reveal flex items-center gap-2 text-[13px] font-semibold uppercase tracking-wider text-accent">
+            <span class="inline-block h-1.5 w-1.5 rounded-full bg-accent" />
+            {hero.eyebrow}
+          </p>
+        )
+      }
 
       <h1
         class="reveal mt-5 max-w-3xl text-balance text-4xl font-bold leading-[1.07] tracking-tight sm:text-5xl md:text-6xl"
@@ -108,12 +112,14 @@ const { site, hero, exams, work, skills, about, education, experience, contact }
             <h3 class="text-[13px] font-semibold uppercase tracking-wider text-faint">Education</h3>
             <div class="mt-5 space-y-6">
               {
-                education.map((ed) => (
+                education.degrees.map((ed) => (
                   <div class="flex flex-col gap-1 border-l-2 border-line pl-5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
                     <div>
                       <p class="font-semibold text-fg">{ed.school}</p>
                       <p class="text-[14.5px] text-muted">{ed.degree}</p>
-                      <p class="mt-1 text-[13px] text-faint">{ed.detail}</p>
+                      {education.showCoursework && ed.coursework?.length > 0 && (
+                        <p class="mt-1 text-[13px] text-faint">{ed.coursework.join(' · ')}</p>
+                      )}
                     </div>
                     <p class="tnum whitespace-nowrap text-[13.5px] text-faint">{ed.years}</p>
                   </div>

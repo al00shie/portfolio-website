@@ -3,7 +3,7 @@ title: Spectral Statistics of Random Matrices
 order: 1
 featured: true
 tagline: My senior thesis in mathematics — and an R package to go with it.
-summary: A 109-page honors thesis on the eigenvalue distributions of classical random-matrix ensembles, paired with RMAT — an R package I wrote to simulate the ensembles and study their spectra.
+summary: A 109-page senior thesis on the eigenvalue distributions of classical random-matrix ensembles, paired with RMAT — an R package I wrote to simulate the ensembles and study their spectra.
 school: Reed College
 credential: B.A. Mathematics
 course: Senior Thesis · Math 470
@@ -40,4 +40,4 @@ My senior thesis studies **random matrices** — matrices whose entries are draw
 
 Alongside the exposition I wrote **RMAT**, an R package that generates each ensemble, computes its spectrum, and visualizes two statistics: the distribution of the eigenvalues themselves and the spacings between them. The package handles the matrix generation, spectral computation, plotting, and parallelization used throughout the thesis.
 
-The result is a 109-page document that pairs rigorous mathematical exposition — with appendices on linear algebra, probability, and Markov chains — against a reusable computational toolkit. It's the most sustained piece of mathematical work I've done, and the closest in spirit to the probability that sits under actuarial practice.
+The result is a 109-page document that pairs rigorous mathematical exposition — with appendices on linear algebra, probability, and Markov chains — against a reusable computational toolkit. It's the most sustained piece of mathematical work I've done, and the closest in spirit to the probability that sits underneath risk and insurance work.

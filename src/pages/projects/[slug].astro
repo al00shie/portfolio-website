@@ -25,8 +25,6 @@ const { project, prev, next } = Astro.props;
 const d = project.data;
 const { Content } = await render(project);
 
-const meta = [d.role].filter(Boolean);
-
 const thumb = d.images.find((i) => i.thumbnail) ?? d.images[0];
 const gallery = d.images.filter((i) => i !== thumb);
 ---
@@ -42,10 +40,7 @@ const gallery = d.images.filter((i) => i !== thumb);
     </a>
 
     <header class="mt-7">
-      <p class="text-[12.5px] font-medium uppercase tracking-wider text-faint">
-        {meta.join(' · ')}
-      </p>
-      <h1 class="mt-3 text-balance text-3xl font-bold leading-tight tracking-tight sm:text-[2.6rem]" transition:name={`title-${project.id}`}>
+      <h1 class="text-balance text-3xl font-bold leading-tight tracking-tight sm:text-[2.6rem]" transition:name={`title-${project.id}`}>
         {d.title}
       </h1>
       <p class="mt-4 text-[17px] leading-relaxed text-muted">{d.summary}</p>
@@ -124,17 +119,6 @@ const gallery = d.images.filter((i) => i !== thumb);
       ) : null
     }
 
-    {
-      gallery.map((img) => (
-        <figure class="mt-8">
-          <div class="overflow-hidden rounded-xl border border-line bg-white">
-            <img src={img.src} alt={img.alt} loading="lazy" decoding="async" class="w-full" />
-          </div>
-          <figcaption class="mt-3 text-[13px] leading-relaxed text-faint">{img.caption ?? img.alt}</figcaption>
-        </figure>
-      ))
-    }
-
     <div class="mt-9 flex flex-wrap gap-2">
       {
         d.methods.map((m) => (
@@ -154,6 +138,18 @@ const gallery = d.images.filter((i) => i !== thumb);
     <div class="article mt-8">
       <Content />
     </div>
+
+    <!-- Supporting figures land after the write-up; the thumbnail stays the lead visual. -->
+    {
+      gallery.map((img) => (
+        <figure class="mt-10">
+          <div class="overflow-hidden rounded-xl border border-line bg-white">
+            <img src={img.src} alt={img.alt} loading="lazy" decoding="async" class="w-full" />
+          </div>
+          <figcaption class="mt-3 text-[13px] leading-relaxed text-faint">{img.caption ?? img.alt}</figcaption>
+        </figure>
+      ))
+    }
 
     {d.interactive === 'semicircle' && <SemicircleExplorer />}
     {d.interactive === 'stylometry' && <StylometryExplorer />}
