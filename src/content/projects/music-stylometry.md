@@ -31,5 +31,3 @@ Stylometry is the statistical fingerprinting of authorship — the tools that ca
 Working from symbolic scores in the Kern format, we wrote parsers to extract five harmonic features — consonance, dissonance, modal interchange, subdominant borrowing, and "bluesiness" — and turned each composition into a feature vector. Comparing the distributions across Bach, Beethoven, Chopin, Joplin, and Vivaldi surfaces genuine stylistic separation (Beethoven's consonance, for instance, runs higher and tighter than Chopin's) that lines up with the genres each composer worked in.
 
 Built in R with a functional-programming pipeline (purrr, ggplot2). A two-person project that let me point quantitative tools at something I care about outside of math — it grew out of the same interest in music that I still build side projects around.
-
-I've also written up the full story — the enharmonic problem, the findings, and what I'd do differently now — as [a blog post](/blog/music-stylometry).

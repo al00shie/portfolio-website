@@ -172,7 +172,7 @@
 <h2>What the Composers Gave Away</h2>
 
 <figure>
-  <img src="../../public/figures/blog/stylometry-consonance.jpg" alt="Boxplots of average composition consonance by composer." />
+  <img src="figures/stylometry-consonance.jpg" alt="Boxplots of average composition consonance by composer." />
   <figcaption><b>Figure 1.</b> Consonance by composer. Beethoven runs high and tight; Chopin and Vivaldi range widely. Figures are from the original 2021 analysis.</figcaption>
 </figure>
 
@@ -181,14 +181,14 @@
 <p>The baroque composers behaved themselves: <strong>Bach and Vivaldi score lowest on bluesiness</strong>, which is reassuring, since blue notes weren’t really on the menu in 1720. <strong>Joplin tops the dissonance chart</strong>, befitting ragtime’s cheerful crunch. And my favorite result: <strong>Chopin sits near the top on subdominant borrowing</strong>. That minor-iv-in-major move is one of the signature sounds that makes Chopin sound like Chopin — it’s genuinely satisfying when a statistic you computed from plain-text files rediscovers something your ears already knew.</p>
 
 <figure>
-  <img src="../../public/figures/blog/stylometry-subdominant.jpg" alt="Boxplots of average subdominant borrowing by composer." />
+  <img src="figures/stylometry-subdominant.jpg" alt="Boxplots of average subdominant borrowing by composer." />
   <figcaption><b>Figure 2.</b> Subdominant borrowing by composer — the “minor plagal” habit. Chopin, famous for exactly this move, sits near the top.</figcaption>
 </figure>
 
 <p>And then there’s the anomaly. <strong>Beethoven came out bluesiest</strong> — comfortably above Joplin, the man who wrote actual rags.</p>
 
 <figure>
-  <img src="../../public/figures/blog/stylometry-bluesiness.jpg" alt="Boxplots of average bluesiness by composer, with Beethoven unexpectedly highest." />
+  <img src="figures/stylometry-bluesiness.jpg" alt="Boxplots of average bluesiness by composer, with Beethoven unexpectedly highest." />
   <figcaption><b>Figure 3.</b> Bluesiness by composer. Beethoven on top is almost certainly an artifact — his sample was the smallest — but we never fully ran it down.</figcaption>
 </figure>
 
@@ -199,7 +199,7 @@
 <p>Harmony turned out to be where composers live; rhythm is where <em>genres</em> live. A waltz is a waltz whoever writes it. So for the rhythm module (this part built directly on Emily’s <code>museR</code> functions) we grouped by genre instead and measured <strong>rhythmic entropy</strong> — roughly, how unpredictable the beat-to-beat rhythm is.</p>
 
 <figure class="genre">
-  <img src="../../public/figures/blog/stylometry-rhythm-entropy.png" alt="Boxplots of rhythmic entropy by genre." />
+  <img src="figures/stylometry-rhythm-entropy.png" alt="Boxplots of rhythmic entropy by genre." />
   <figcaption><b>Figure 4.</b> Rhythmic entropy by genre. Fugues highest, ragtime tightest, and etudes all over the place — each one is a lesson, and it depends what the lesson is about.</figcaption>
 </figure>
 
@@ -208,7 +208,7 @@
 <p>The cleanest single result in the whole project, though, is this one:</p>
 
 <figure class="genre">
-  <img src="../../public/figures/blog/stylometry-subdivision.png" alt="Stacked bar chart of each score's most common rhythmic subdivision by genre." />
+  <img src="figures/stylometry-subdivision.png" alt="Stacked bar chart of each score's most common rhythmic subdivision by genre." />
   <figcaption><b>Figure 5.</b> Each score’s most common rhythmic subdivision, by genre. Every single waltz lands on the quarter note — the 3/4 time signature, rediscovered from raw data.</figcaption>
 </figure>
 
