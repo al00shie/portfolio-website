@@ -18,6 +18,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://alitaqi.pag
 
 // Chip icons keyed by nav label (inner SVG markup; 24×24 stroke glyphs).
 const NAV_ICONS: Record<string, string> = {
+  Home: '<path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.5V20h13v-9.5"/><path d="M10 20v-5.5h4V20"/>',
   About:
     '<circle cx="12" cy="8" r="3.5"/><path d="M4.5 20c.6-3.6 3.7-5.5 7.5-5.5s6.9 1.9 7.5 5.5"/>',
   Work: '<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>',
@@ -25,8 +26,11 @@ const NAV_ICONS: Record<string, string> = {
     '<rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="m4.5 7.5 7.5 5.5 7.5-5.5"/>',
 };
 
-// Project pages are the Work section — light the Work chip there.
-const onProjectPage = Astro.url.pathname.startsWith('/projects');
+// Which chip is lit: exact path match, and project pages count as Work.
+// (Normalize trailing slashes so dev and the built site agree.)
+const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isActive = (href: string) =>
+  currentPath === href || (href === '/work' && currentPath.startsWith('/projects'));
 ---
 
 <!doctype html>
@@ -126,7 +130,7 @@ const onProjectPage = Astro.url.pathname.startsWith('/projects');
               <a
                 href={item.href}
                 aria-label={item.label}
-                aria-current={onProjectPage && item.href === '/#work' ? 'page' : undefined}
+                aria-current={isActive(item.href) ? 'page' : undefined}
                 class="inline-flex items-center gap-2 rounded-full border border-transparent px-3 py-2 font-condensed text-[15px] font-bold text-accent transition-colors hover:border-accent hover:bg-accent-soft hover:text-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent aria-[current=page]:border-fg aria-[current=page]:bg-fg aria-[current=page]:text-surface sm:px-3.5"
               >
                 {NAV_ICONS[item.label] && (
@@ -171,7 +175,7 @@ const onProjectPage = Astro.url.pathname.startsWith('/projects');
         <div class="flex items-center gap-5">
           <a class="wipe transition-colors hover:text-accent" href={`mailto:${site.email}`}>Email</a>
           <a class="wipe transition-colors hover:text-accent" href={site.github} target="_blank" rel="noopener">GitHub</a>
-          <a class="wipe transition-colors hover:text-accent" href="/#work">Work</a>
+          <a class="wipe transition-colors hover:text-accent" href="/work">Work</a>
         </div>
       </div>
     </footer>
@@ -220,10 +224,13 @@ const onProjectPage = Astro.url.pathname.startsWith('/projects');
         lastY = window.scrollY;
 
         // the persisted header keeps its server-rendered chip state, so
-        // refresh the Work chip's aria-current for the page we're now on
-        const onProject = location.pathname.startsWith('/projects');
-        header?.querySelectorAll('nav a[href="/#work"]').forEach((a) => {
-          if (onProject) a.setAttribute('aria-current', 'page');
+        // refresh each chip's aria-current for the page we're now on
+        // (mirrors the isActive() logic in the frontmatter)
+        const path = location.pathname.replace(/\/+$/, '') || '/';
+        header?.querySelectorAll('nav a[href]').forEach((a) => {
+          const href = a.getAttribute('href') ?? '';
+          const active = path === href || (href === '/work' && path.startsWith('/projects'));
+          if (active) a.setAttribute('aria-current', 'page');
           else a.removeAttribute('aria-current');
         });
 
@@ -250,20 +257,35 @@ const onProjectPage = Astro.url.pathname.startsWith('/projects');
       // module is ever evaluated later than that.
       if (document.readyState === 'complete') initPage();
 
-      // ← / → step through neighbouring projects on project pages (the
-      // prev/next nav carries the hrefs). Inert while typing or with a
-      // modifier held; a no-op on pages without the nav.
+      // ← / → keyboard paging, salo-style. On a project page the keys step
+      // through neighbouring projects (the prev/next nav carries the hrefs);
+      // everywhere else they step through the header's nav pages in order,
+      // wrapping around. Inert while typing, with a modifier held, or while
+      // the reader has a text selection.
       addEventListener('keydown', (e) => {
         if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
         if (e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) return;
         const t = e.target;
         if (t instanceof HTMLElement && (t.isContentEditable || /^(input|textarea|select)$/i.test(t.tagName))) return;
-        // don't hijack arrows while the reader has a text selection
         if (!(window.getSelection()?.isCollapsed ?? true)) return;
-        const nav = document.querySelector('[data-project-nav]');
-        if (!(nav instanceof HTMLElement)) return;
-        const href = e.key === 'ArrowLeft' ? nav.dataset.prev : nav.dataset.next;
-        if (href) navigate(href);
+        const step = e.key === 'ArrowRight' ? 1 : -1;
+
+        // project pages: neighbouring projects take precedence
+        const projectNav = document.querySelector('[data-project-nav]');
+        if (projectNav instanceof HTMLElement) {
+          const href = step === -1 ? projectNav.dataset.prev : projectNav.dataset.next;
+          if (href) navigate(href);
+          return;
+        }
+
+        // main pages: the chip list IS the page order (kept in content.yaml)
+        const pages = [...(header?.querySelectorAll('nav a[href]') ?? [])]
+          .map((a) => a.getAttribute('href') ?? '')
+          .filter((h) => h.startsWith('/') && !h.includes('#'));
+        const current = location.pathname.replace(/\/+$/, '') || '/';
+        const i = pages.indexOf(current);
+        if (i === -1) return; // /live/*, 404 — stay put
+        navigate(pages[(i + step + pages.length) % pages.length]);
       });
 
       // Local clock in the header. If the runtime lacks tz data (some

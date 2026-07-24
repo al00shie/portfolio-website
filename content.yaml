@@ -20,10 +20,12 @@ site:
   github: https://github.com/al00shie
 
 # --- Top navigation links ---------------------------------------------------
+#  Real subpages (salo-style). The ← / → keys step through these in order.
 nav:
-  - { label: About, href: "/#about" }
-  - { label: Work, href: "/#work" }
-  - { label: Contact, href: "/#contact" }
+  - { label: Home, href: "/" }
+  - { label: About, href: "/about" }
+  - { label: Work, href: "/work" }
+  - { label: Contact, href: "/contact" }
 
 # --- Hero: the big intro at the top of the homepage -------------------------
 #  The hero shows your NAME (site.name above) as the big serif title; the
@@ -131,9 +133,17 @@ experience:
       - Led a small student development team and acted as primary liaison to management.
 
 # --- Contact ----------------------------------------------------------------
+#  The form composes an email in the visitor's own mail app (no backend, no
+#  third-party service, nothing stored).  showForm: false hides it.
 contact:
   eyebrow: Contact
   heading: Let's talk.
   blurb: >-
     I'm open to quantitative and analytical roles across insurance and finance.
     Email is the fastest way to reach me — I read everything.
+  showForm: true
+  form:
+    name: Name
+    email: Your Email
+    message: Message
+    send: Send It

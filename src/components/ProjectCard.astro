@@ -3,9 +3,11 @@ import type { CollectionEntry } from 'astro:content';
 
 interface Props {
   project: CollectionEntry<'projects'>;
+  /** Homepage feature-panel variant: larger serif title, roomier text. */
+  large?: boolean;
 }
 
-const { project } = Astro.props;
+const { project, large = false } = Astro.props;
 const d = project.data;
 const href = `/projects/${project.id}`;
 const tags = d.methods.slice(0, 3);
@@ -41,13 +43,13 @@ const thumb = d.images.find((i) => i.thumbnail) ?? d.images[0];
   }
 
   <h3
-    class="panel-title mt-1.5 font-display text-[1.45rem] font-medium leading-snug text-fg"
+    class={`panel-title mt-1.5 font-display font-medium leading-snug text-fg ${large ? 'text-[1.7rem] sm:text-[1.9rem]' : 'text-[1.45rem]'}`}
     transition:name={`title-${project.id}`}
   >
     {d.title}
   </h3>
 
-  <p class="mt-2 text-[14.5px] leading-relaxed text-muted">{d.tagline}</p>
+  <p class={`mt-2 leading-relaxed text-muted ${large ? 'text-[15.5px]' : 'text-[14.5px]'}`}>{d.tagline}</p>
 
   <span class="card-cta mt-3 inline-flex items-center gap-1.5 self-start text-[13.5px] font-semibold text-accent">
     View Project

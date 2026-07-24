@@ -11,7 +11,7 @@ component to tweak wording:
 
 | To change… | Edit |
 |---|---|
-| Homepage copy & résumé — about, skills, exams, education, experience — plus nav and SEO | **`content.yaml`** (repo root) |
+| Site copy & résumé — hero, about, skills, exams, education, experience, contact — plus nav and SEO | **`content.yaml`** (repo root) |
 | A project write-up — title, summary, methods, body, links | `src/content/projects/<project>.md` |
 | A project's figure / animation / interactive data | see **[`scripts/README.md`](scripts/README.md)** |
 
@@ -28,9 +28,15 @@ npx wrangler pages deploy dist --project-name alitaqi --branch main   # deploy t
 
 ## Layout
 
-- **`content.yaml`** — all homepage + global text (the file to tinker with)
+- **`content.yaml`** — all site text (the file to tinker with)
 - `src/content/projects/*.md` — one markdown file per project
-- `src/pages/`, `src/components/`, `src/layouts/` — the Astro site itself
+- `src/pages/` — the subpages: `index` (hero + two feature panels + coda), `about`
+  (bio, education, experience, toolkit), `work` (full project grid), `contact`
+  (email buttons + a backend-free form that composes a mail in the visitor's own
+  app), `projects/[slug]` (write-ups), `404`. The ← / → keys page through the nav
+  (and through neighbouring projects on a project page).
+- `src/components/`, `src/layouts/` — shared shell (header chips, clock, theme,
+  motion) and cards
 - `src/pages/live/` — the in-browser R demos (a live WebR cell + a Shinylive app)
 - `scripts/` — R + shell that generate the animations, interactive datasets, and live app
   (see [`scripts/README.md`](scripts/README.md))
