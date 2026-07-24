@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Page Not Found — Ali Taqi">
+  <section class="mx-auto max-w-3xl px-5 py-28 text-center sm:px-8 sm:py-36">
+    <p
+      class="reveal font-condensed text-[14px] font-bold uppercase tracking-[0.12em] text-accent before:mx-auto before:mb-5 before:block before:h-[2px] before:w-12 before:bg-accent before:content-['']"
+    >
+      404
+    </p>
+    <h1 class="reveal mt-3 font-display text-4xl font-medium sm:text-5xl" style="animation-delay:60ms">
+      This page doesn't exist.
+    </h1>
+    <p class="reveal mx-auto mt-5 max-w-md text-[16px] leading-relaxed text-muted" style="animation-delay:140ms">
+      The link may be stale — everything worth seeing is one step away.
+    </p>
+    <div class="reveal mt-9 flex flex-wrap items-center justify-center gap-3" style="animation-delay:220ms">
+      <a
+        href="/"
+        class="inline-flex items-center gap-2 rounded-lg bg-navy px-5 py-2.5 text-[14.5px] font-semibold text-white transition-transform hover:-translate-y-0.5"
+      >
+        Back Home
+      </a>
+      <a
+        href="/#work"
+        class="inline-flex items-center gap-2 rounded-lg border border-line px-5 py-2.5 text-[14.5px] font-semibold text-fg transition-colors hover:border-accent hover:text-accent"
+      >
+        View Work
+      </a>
+    </div>
+  </section>
+</Base>

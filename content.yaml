@@ -26,6 +26,9 @@ nav:
   - { label: Contact, href: "/#contact" }
 
 # --- Hero: the big intro at the top of the homepage -------------------------
+#  The hero shows your NAME (site.name above) as the big serif title; the
+#  headline renders as the roles line under it, with each " & " turning into
+#  a dot separator ("A & B" → "A · B"). No " & " = a single role, also fine.
 hero:
   eyebrow: ""            # small badge above the headline; leave "" to hide it
   headline: Data Scientist & Statistician

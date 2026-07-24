@@ -1,5 +1,28 @@
 @import "tailwindcss";
 
+/* ---- Webfonts (self-hosted: /live/* runs under COEP require-corp, so CDN
+   fonts would be blocked there; same-origin files work everywhere) -------- */
+@font-face {
+  font-family: "Fraunces";
+  src: url("/fonts/fraunces-latin.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Archivo Narrow";
+  src: url("/fonts/archivo-narrow-latin.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 /* Class-based dark mode (manual toggle), falls back to system on first paint */
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -23,6 +46,11 @@
     "Segoe UI", Arial, sans-serif;
   --font-mono: "SF Mono", "JetBrains Mono", "Fira Code", ui-monospace,
     SFMono-Regular, Menlo, monospace;
+  /* Editorial display serif (headings, project titles) + condensed accent
+     face (eyebrows, nav chips, CTAs) — the salo-website type pairing. */
+  --font-display: "Fraunces", "Iowan Old Style", Palatino, Georgia, serif;
+  --font-condensed: "Archivo Narrow", "Arial Narrow", "Helvetica Neue",
+    sans-serif;
 
   /* Tighter, editorial reading width */
   --breakpoint-xs: 30rem;
@@ -69,6 +97,8 @@ body {
   font-feature-settings: "kern", "liga", "calt";
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* soft cross-fade on theme toggle, matching the header's */
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* Honor system preference before the user touches the toggle */
@@ -89,7 +119,8 @@ body {
 
 ::selection {
   background: var(--accent);
-  color: #fff;
+  /* surface, not white — the dark theme's light-blue accent needs dark text */
+  color: var(--surface);
 }
 
 /* In @layer base so text-* utilities (e.g. text-white on button links) win. */
@@ -105,29 +136,139 @@ body {
   html { scroll-behavior: auto; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important; /* inline stagger delays too */
     transition-duration: 0.01ms !important;
   }
 }
 
-/* Subtle, reusable rising-in animation (opt-in via .reveal) */
+/* Page-load choreography (opt-in via .reveal / .reveal-fade): text rises,
+   imagery only fades — stagger with inline animation-delay. */
 @keyframes reveal-up {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(18px); }
   to { opacity: 1; transform: none; }
 }
+@keyframes soft-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 .reveal {
-  animation: reveal-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: reveal-up 0.7s ease-out both;
+}
+.reveal-fade {
+  animation: soft-fade-in 0.9s ease-out both;
 }
 
-/* Scroll-driven reveal — progressive enhancement, 0 KB JS.
-   Default state is fully visible; only Chromium + motion-OK users get the effect. */
-@media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) {
-    .reveal-scroll {
-      animation: reveal-up linear both;
-      animation-timeline: view();
-      animation-range: entry 0% cover 30%;
-    }
+/* --------------------------------------------------------------------------
+   Motion — scroll reveals, hide-on-scroll header, hover choreography.
+   Scoped to screen so unrevealed sections can't print as blanks. The scroll
+   reveals are additionally armed by the :root.anim class (set inline in
+   Base.astro's head only when JS + IntersectionObserver are present and
+   reduced motion is off), so content can never be stranded invisible.
+   -------------------------------------------------------------------------- */
+
+@media screen and (prefers-reduced-motion: no-preference) {
+  /* sections rise in as they enter the viewport (IO adds .revealed);
+     the second card in a work-grid row trails the first by a beat */
+  :root.anim [data-reveal] {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
   }
+
+  :root.anim .work-grid > [data-reveal]:nth-child(even) {
+    transition-delay: 0.12s;
+  }
+
+  :root.anim [data-reveal].revealed {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* slow decelerating zoom inside the project panel's crop frame */
+  .project-panel:hover .panel-media img,
+  .project-panel:focus-visible .panel-media img {
+    transform: scale(1.035);
+  }
+}
+
+/* Header slides away while scrolling down, returns on the first upward
+   scroll (class managed in Base.astro; never applied under reduced motion) */
+.site-header {
+  transition: transform 0.45s ease, background-color 0.2s ease;
+}
+.site-header.is-hidden {
+  transform: translateY(-100%);
+}
+/* keyboard users tabbing into the hidden header get it back */
+.site-header.is-hidden:focus-within {
+  transform: none;
+}
+
+/* Header locale clock — JS-filled, so only shown once :root.js confirms JS
+   is running, and only on wide screens where the header has room. */
+.header-place {
+  display: none;
+}
+@media (min-width: 64em) {
+  :root.js .header-place {
+    display: block;
+  }
+}
+
+/* Directional underline wipe: an accent rule wipes in from the left on
+   hover and exits toward the right (the transform-origin swap makes the
+   exit continue the same direction instead of rewinding). `.wipe` fires on
+   its own hover/focus; `.card-cta` is triggered by its whole .project-panel. */
+.wipe {
+  position: relative;
+}
+.wipe::after,
+.card-cta::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: right center;
+  transition: transform 0.5s cubic-bezier(1, 0, 0, 1);
+}
+.wipe:hover::after,
+.wipe:focus-visible::after,
+.project-panel:hover .card-cta::after,
+.project-panel:focus-visible .card-cta::after {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
+/* Project panel hover choreography (the zoom half lives in the Motion
+   section above, gated on prefers-reduced-motion) */
+.project-panel .panel-media img {
+  transition: opacity 0.3s ease, transform 0.8s cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+.project-panel:hover .panel-media img {
+  opacity: 0.94;
+}
+.project-panel .panel-title {
+  transition: color 0.3s ease;
+}
+.project-panel:hover .panel-title,
+.project-panel:focus-visible .panel-title {
+  color: var(--accent);
+}
+.card-cta {
+  position: relative;
+}
+.cta-arrow {
+  display: inline-block;
+  transition: transform 0.25s ease;
+}
+.project-panel:hover .cta-arrow,
+.project-panel:focus-visible .cta-arrow,
+.wipe:hover .cta-arrow {
+  transform: translateX(4px);
 }
 
 /* ---- Typographic craft -------------------------------------------------- */
@@ -159,9 +300,10 @@ body {
 }
 .article h2 {
   color: var(--fg);
-  font-size: 1.4rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  font-weight: 600;
+  letter-spacing: 0;
   margin-top: 1.8em;
   margin-bottom: 0.5em;
 }

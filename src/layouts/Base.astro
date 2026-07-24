@@ -15,6 +15,18 @@ interface Props {
 const { title = site.title, description = site.description } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://alitaqi.pages.dev');
+
+// Chip icons keyed by nav label (inner SVG markup; 24×24 stroke glyphs).
+const NAV_ICONS: Record<string, string> = {
+  About:
+    '<circle cx="12" cy="8" r="3.5"/><path d="M4.5 20c.6-3.6 3.7-5.5 7.5-5.5s6.9 1.9 7.5 5.5"/>',
+  Work: '<rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/>',
+  Contact:
+    '<rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="m4.5 7.5 7.5 5.5 7.5-5.5"/>',
+};
+
+// Project pages are the Work section — light the Work chip there.
+const onProjectPage = Astro.url.pathname.startsWith('/projects');
 ---
 
 <!doctype html>
@@ -34,31 +46,52 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://alitaqi.pag
     <meta property="og:url" content={canonical.href} />
     <meta name="twitter:card" content="summary_large_image" />
 
+    <!-- Self-hosted display faces (COEP on /live/* rules out CDN fonts) -->
+    <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/archivo-narrow-latin.woff2" as="font" type="font/woff2" crossorigin />
+
     <ClientRouter />
 
-    <!-- No-flash theme resolution before first paint -->
+    <!-- No-flash theme resolution + motion arming before first paint.
+         `js` gates JS-filled UI (header clock); `anim` additionally requires
+         IntersectionObserver and no reduced-motion preference, and gates the
+         scroll reveals — so content can never be stranded invisible. -->
     <script is:inline>
       (function () {
+        var root = document.documentElement;
         try {
           var t = localStorage.getItem('theme');
           var dark = t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches);
-          document.documentElement.classList.add(dark ? 'dark' : 'light');
+          root.classList.add(dark ? 'dark' : 'light');
         } catch (e) {
-          document.documentElement.classList.add('light');
+          root.classList.add('light');
+        }
+        root.classList.add('js');
+        if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          root.classList.add('anim');
+          // safety valve: if the bundled reveal script never initializes
+          // (failed load), disarm so content can't stay hidden
+          setTimeout(function () {
+            if (!window.__revealReady) root.classList.remove('anim');
+          }, 3000);
         }
       })();
     </script>
 
-    <!-- Re-apply theme after View Transitions swaps the document -->
+    <!-- Re-apply theme + arming after View Transitions swaps the document -->
     <script is:inline>
       document.addEventListener('astro:after-swap', function () {
+        var r = document.documentElement;
         try {
           var t = localStorage.getItem('theme');
           var dark = t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches);
-          var r = document.documentElement;
           r.classList.remove('dark', 'light');
           r.classList.add(dark ? 'dark' : 'light');
         } catch (e) {}
+        r.classList.add('js');
+        if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          r.classList.add('anim');
+        }
       });
     </script>
   </head>
@@ -71,31 +104,58 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://alitaqi.pag
     >
 
     <header
-      class="sticky top-0 z-40 border-b border-line/70 bg-surface/80 backdrop-blur-md"
+      class="site-header sticky top-0 z-40 border-b border-line/70 bg-surface/80 backdrop-blur-md"
+      transition:persist="site-header"
     >
-      <div class="mx-auto flex h-16 max-w-5xl items-center justify-between px-5 sm:px-8">
+      <div class="relative mx-auto flex h-16 max-w-5xl items-center justify-between px-5 sm:px-8">
         <a href="/" class="group flex items-center gap-2.5" aria-label={`${site.name} — home`}>
           <span
             class="grid h-8 w-8 place-items-center rounded-md bg-navy text-[13px] font-bold tracking-tight text-white"
             >{site.initials}</span
           >
-          <span class="text-[15px] font-semibold tracking-tight">{site.name}</span>
+          <span class="hidden text-[15px] font-semibold tracking-tight xs:inline">{site.name}</span>
         </a>
 
-        <nav class="flex items-center gap-1 sm:gap-2">
+        <!-- Centered on wide screens so the chips sit in the same spot on every page -->
+        <nav
+          class="flex items-center gap-1 md:absolute md:left-1/2 md:top-1/2 md:w-max md:-translate-x-1/2 md:-translate-y-1/2"
+          aria-label="Main"
+        >
           {
             nav.map((item) => (
               <a
                 href={item.href}
-                class="rounded-md px-3 py-2 text-[14px] font-medium text-muted transition-colors hover:text-fg"
+                aria-label={item.label}
+                aria-current={onProjectPage && item.href === '/#work' ? 'page' : undefined}
+                class="inline-flex items-center gap-2 rounded-full border border-transparent px-3 py-2 font-condensed text-[15px] font-bold text-accent transition-colors hover:border-accent hover:bg-accent-soft hover:text-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent aria-[current=page]:border-fg aria-[current=page]:bg-fg aria-[current=page]:text-surface sm:px-3.5"
               >
-                {item.label}
+                {NAV_ICONS[item.label] && (
+                  <svg
+                    class="h-4 w-4 flex-none"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                    set:html={NAV_ICONS[item.label]}
+                  />
+                )}
+                <!-- icon-only below sm — but keep the label when there's no icon to fall back on -->
+                <span class={NAV_ICONS[item.label] ? 'hidden sm:inline' : ''}>{item.label}</span>
               </a>
             ))
           }
-          <span class="mx-1 hidden h-5 w-px bg-line sm:block"></span>
-          <ThemeToggle />
         </nav>
+
+        <div class="flex items-center gap-4">
+          <!-- Local clock — a small "places" detail, JS-gated via :root.js -->
+          <p class="header-place font-condensed text-[13px] font-bold uppercase tracking-[0.14em] text-accent">
+            <span>Portland, OR</span><span class="mx-2 text-faint" aria-hidden="true">—</span><span data-local-time></span>
+          </p>
+          <ThemeToggle />
+        </div>
       </div>
     </header>
 
@@ -109,11 +169,126 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://alitaqi.pag
       >
         <p>© {new Date().getFullYear()} {site.name}</p>
         <div class="flex items-center gap-5">
-          <a class="transition-colors hover:text-accent" href={`mailto:${site.email}`}>Email</a>
-          <a class="transition-colors hover:text-accent" href={site.github} target="_blank" rel="noopener">GitHub</a>
-          <a class="transition-colors hover:text-accent" href="/#work">Work</a>
+          <a class="wipe transition-colors hover:text-accent" href={`mailto:${site.email}`}>Email</a>
+          <a class="wipe transition-colors hover:text-accent" href={site.github} target="_blank" rel="noopener">GitHub</a>
+          <a class="wipe transition-colors hover:text-accent" href="/#work">Work</a>
         </div>
       </div>
     </footer>
+
+    <script>
+      import { navigate } from 'astro:transitions/client';
+
+      // handshake with the head arming script's safety valve
+      (window as any).__revealReady = true;
+
+      // Hide the header while scrolling down; bring it back on the first
+      // upward scroll (or near the top). Skipped under reduced motion.
+      // The header carries transition:persist, so this one binding survives
+      // View Transitions swaps.
+      const header = document.querySelector('.site-header');
+      const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+      let lastY = window.scrollY;
+      addEventListener(
+        'scroll',
+        () => {
+          if (!header) return;
+          if (reduceMotion.matches) {
+            header.classList.remove('is-hidden');
+            return;
+          }
+          const y = window.scrollY;
+          // a single huge delta is a programmatic jump (anchor, scroll
+          // restore), not the reader scrolling — never hide on those
+          if (y - lastY > 200) {
+            lastY = y;
+            return;
+          }
+          if (y > lastY && y > 160) header.classList.add('is-hidden');
+          else if (y < lastY || y <= 160) header.classList.remove('is-hidden');
+          lastY = y;
+        },
+        { passive: true },
+      );
+
+      // Scroll reveals: elements marked data-reveal rise in as they enter
+      // the viewport. Re-runs per page (ClientRouter swaps the DOM); armed
+      // by the inline `anim` class set in <head>.
+      const initPage = () => {
+        // a swap can land with the header still hidden from the last page
+        header?.classList.remove('is-hidden');
+        lastY = window.scrollY;
+
+        // the persisted header keeps its server-rendered chip state, so
+        // refresh the Work chip's aria-current for the page we're now on
+        const onProject = location.pathname.startsWith('/projects');
+        header?.querySelectorAll('nav a[href="/#work"]').forEach((a) => {
+          if (onProject) a.setAttribute('aria-current', 'page');
+          else a.removeAttribute('aria-current');
+        });
+
+        if (!document.documentElement.classList.contains('anim')) return;
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              const el = entry.target;
+              el.classList.add('revealed');
+              io.unobserve(el);
+              // drop the marker once the rise settles so the lingering
+              // transition can't damp instant press feedback on links
+              setTimeout(() => el.removeAttribute('data-reveal'), 900);
+            }
+          },
+          { rootMargin: '0px 0px -8% 0px' },
+        );
+        document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+      };
+      document.addEventListener('astro:page-load', initPage);
+      // On first entry astro:page-load fires once the page finishes loading
+      // (always after this module runs) — but don't strand content if this
+      // module is ever evaluated later than that.
+      if (document.readyState === 'complete') initPage();
+
+      // ← / → step through neighbouring projects on project pages (the
+      // prev/next nav carries the hrefs). Inert while typing or with a
+      // modifier held; a no-op on pages without the nav.
+      addEventListener('keydown', (e) => {
+        if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+        if (e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) return;
+        const t = e.target;
+        if (t instanceof HTMLElement && (t.isContentEditable || /^(input|textarea|select)$/i.test(t.tagName))) return;
+        // don't hijack arrows while the reader has a text selection
+        if (!(window.getSelection()?.isCollapsed ?? true)) return;
+        const nav = document.querySelector('[data-project-nav]');
+        if (!(nav instanceof HTMLElement)) return;
+        const href = e.key === 'ArrowLeft' ? nav.dataset.prev : nav.dataset.next;
+        if (href) navigate(href);
+      });
+
+      // Local clock in the header. If the runtime lacks tz data (some
+      // WebViews throw on the timeZone option), drop the widget rather than
+      // leave a dangling "Portland, OR —". Re-tick on pageshow /
+      // visibilitychange since timers freeze in the back/forward cache.
+      const clock = document.querySelector('[data-local-time]');
+      if (clock) {
+        try {
+          const fmt = new Intl.DateTimeFormat('en-US', {
+            hour: 'numeric',
+            minute: '2-digit',
+            timeZone: 'America/Los_Angeles',
+          });
+          const tick = () => {
+            clock.textContent = fmt.format(new Date());
+          };
+          tick();
+          setInterval(tick, 30_000);
+          addEventListener('pageshow', tick);
+          document.addEventListener('visibilitychange', tick);
+        } catch {
+          document.querySelector('.header-place')?.remove();
+        }
+      }
+    </script>
   </body>
 </html>
